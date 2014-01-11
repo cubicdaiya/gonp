@@ -49,7 +49,7 @@ func New(a string, b string) *Diff {
 	m, n := len(a), len(b)
 	diff := new(Diff)
 	ctl := new(Ctl)
-	if m > n {
+	if m >= n {
 		diff.A, diff.B = b, a
 		diff.m, diff.n = n, m
 		ctl.reverse = true
@@ -125,7 +125,7 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 	x_idx, y_idx := 1, 1
 	px_idx, py_idx := 0, 0
 	ctl := diff.ctl
-	for i := len(epc) - 1; i != 0; i-- {
+	for i := len(epc) - 1; i >= 0; i-- {
 		for (px_idx < epc[i].x) || (py_idx < epc[i].y) {
 			var t SesType
 			if (epc[i].y - epc[i].x) > (py_idx - px_idx) {
@@ -174,8 +174,8 @@ func (diff *Diff) snake(k, p, pp, offset int, ctl *Ctl) int {
 	x := y - k
 
 	for x < diff.m && y < diff.n && diff.A[x] == diff.B[y] {
-		x += 1
-		y += 1
+		x++
+		y++
 	}
 
 	ctl.path[k+offset] = len(ctl.pathposi)
