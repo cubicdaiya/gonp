@@ -39,3 +39,43 @@ func TestDiff3(t *testing.T) {
 	assert(t, diff.Editdistance() == 6)
 	assert(t, lcs == "acbdabed")
 }
+
+func TestDiff4(t *testing.T) {
+	diff := New("abcbda", "bdcaba")
+	diff.Compose()
+	lcs := diff.Lcs()
+	assert(t, diff.Editdistance() == 4)
+	assert(t, lcs == "bcba")
+}
+
+func TestDiff5(t *testing.T) {
+	diff := New("bokko", "bokkko")
+	diff.Compose()
+	lcs := diff.Lcs()
+	assert(t, diff.Editdistance() == 1)
+	assert(t, lcs == "bokko")
+}
+
+func TestDiff6(t *testing.T) {
+	diff := New("", "")
+	diff.Compose()
+	lcs := diff.Lcs()
+	assert(t, diff.Editdistance() == 0)
+	assert(t, lcs == "")
+}
+
+func TestDiff7(t *testing.T) {
+	diff := New("a", "")
+	diff.Compose()
+	lcs := diff.Lcs()
+	assert(t, diff.Editdistance() == 1)
+	assert(t, lcs == "")
+}
+
+func TestDiff8(t *testing.T) {
+	diff := New("", "b")
+	diff.Compose()
+	lcs := diff.Lcs()
+	assert(t, diff.Editdistance() == 1)
+	assert(t, lcs == "")
+}
