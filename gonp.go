@@ -6,6 +6,7 @@ package gonp
 import (
 	"container/list"
 	"math"
+	"unicode/utf8"
 )
 
 type SesType int
@@ -21,13 +22,13 @@ type Point struct {
 }
 
 type SesElem struct {
-	c byte
+	c rune
 	t SesType
 }
 
 type Diff struct {
-	A    string
-	B    string
+	A    []rune
+	B    []rune
 	m, n int
 	ed   int
 	ctl  *Ctl
@@ -46,15 +47,15 @@ func max(x, y int) int {
 }
 
 func New(a string, b string) *Diff {
-	m, n := len(a), len(b)
+	m, n := utf8.RuneCountInString(a), utf8.RuneCountInString(b)
 	diff := new(Diff)
 	ctl := new(Ctl)
 	if m >= n {
-		diff.A, diff.B = b, a
+		diff.A, diff.B = []rune(b), []rune(a)
 		diff.m, diff.n = n, m
 		ctl.reverse = true
 	} else {
-		diff.A, diff.B = a, b
+		diff.A, diff.B = []rune(a), []rune(b)
 		diff.m, diff.n = m, n
 		ctl.reverse = false
 	}
@@ -67,9 +68,9 @@ func (diff *Diff) Editdistance() int {
 }
 
 func (diff *Diff) Lcs() string {
-	var b = make([]byte, diff.lcs.Len())
+	var b = make([]rune, diff.lcs.Len())
 	for i, e := 0, diff.lcs.Front(); e != nil; i, e = i+1, e.Next() {
-		b[i] = e.Value.(byte)
+		b[i] = e.Value.(rune)
 	}
 	return string(b)
 }

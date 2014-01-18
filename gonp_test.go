@@ -79,3 +79,11 @@ func TestDiff8(t *testing.T) {
 	assert(t, diff.Editdistance() == 1)
 	assert(t, lcs == "")
 }
+
+func TestDiff9(t *testing.T) {
+	diff := New("久保達彦", "久保竜彦")
+	diff.Compose()
+	lcs := diff.Lcs()
+	assert(t, diff.Editdistance() == 2)
+	assert(t, lcs == "久保彦")
+}
