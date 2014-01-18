@@ -12,11 +12,11 @@ diff.Compose()
 ed := diff.Editdistance() // ed is 2
 lcs := diff.Lcs() // lcs is "ab"
 
+ses := diff.Ses()
 // ses is []SesElem{
 //        {c: 'a', t: Common},
 //        {c: 'b', t: Common},
 //        {c: 'c', t: Delete},
 //        {c: 'd', t: Add},
 //        }
-ses := diff.Ses()
 ```
