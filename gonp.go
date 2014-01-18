@@ -75,8 +75,13 @@ func (diff *Diff) Lcs() string {
 	return string(b)
 }
 
-func (diff *Diff) Ses() *list.List {
-	return diff.ses
+func (diff *Diff) Ses() []SesElem {
+	seq := make([]SesElem, diff.ses.Len())
+	for i, e := 0, diff.ses.Front(); e != nil; i, e = i+1, e.Next() {
+		seq[i].c = e.Value.(SesElem).c
+		seq[i].t = e.Value.(SesElem).t
+	}
+	return seq
 }
 
 func (diff *Diff) Compose() {
