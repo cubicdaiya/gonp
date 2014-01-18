@@ -130,7 +130,7 @@ func TestDiff5(t *testing.T) {
 	assert(t, equalsSesElemArray(ses, ses_))
 }
 
-func TestDiff6(t *testing.T) {
+func TestDiffEmptyString1(t *testing.T) {
 	diff := New("", "")
 	diff.Compose()
 	lcs := diff.Lcs()
@@ -141,7 +141,7 @@ func TestDiff6(t *testing.T) {
 	assert(t, equalsSesElemArray(ses, ses_))
 }
 
-func TestDiff7(t *testing.T) {
+func TestDiffEmptyString2(t *testing.T) {
 	diff := New("a", "")
 	diff.Compose()
 	lcs := diff.Lcs()
@@ -154,7 +154,7 @@ func TestDiff7(t *testing.T) {
 	assert(t, equalsSesElemArray(ses, ses_))
 }
 
-func TestDiff8(t *testing.T) {
+func TestDiffEmptyString3(t *testing.T) {
 	diff := New("", "b")
 	diff.Compose()
 	lcs := diff.Lcs()
@@ -167,7 +167,7 @@ func TestDiff8(t *testing.T) {
 	assert(t, equalsSesElemArray(ses, ses_))
 }
 
-func TestDiff9(t *testing.T) {
+func TestDiffMultiByteString(t *testing.T) {
 	diff := New("久保竜彦", "久保達彦")
 	diff.Compose()
 	lcs := diff.Lcs()
