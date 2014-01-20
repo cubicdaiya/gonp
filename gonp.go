@@ -39,6 +39,7 @@ type Diff struct {
 type Ctl struct {
 	reverse  bool
 	path     []int
+	onlyEd   bool
 	pathposi map[int]Point
 }
 
@@ -59,8 +60,13 @@ func New(a string, b string) *Diff {
 		diff.m, diff.n = m, n
 		ctl.reverse = false
 	}
+	ctl.onlyEd = false
 	diff.ctl = ctl
 	return diff
+}
+
+func (diff *Diff) OnlyEd() {
+	diff.ctl.onlyEd = true
 }
 
 func (diff *Diff) Editdistance() int {
@@ -116,6 +122,10 @@ func (diff *Diff) Compose() {
 			diff.ed = delta + 2*p
 			break
 		}
+	}
+
+	if ctl.onlyEd {
+		return
 	}
 
 	r := ctl.path[delta+offset]
@@ -184,8 +194,10 @@ func (diff *Diff) snake(k, p, pp, offset int, ctl *Ctl) int {
 		y++
 	}
 
-	ctl.path[k+offset] = len(ctl.pathposi)
-	ctl.pathposi[len(ctl.pathposi)] = Point{x: x, y: y, k: r}
+	if !ctl.onlyEd {
+		ctl.path[k+offset] = len(ctl.pathposi)
+		ctl.pathposi[len(ctl.pathposi)] = Point{x: x, y: y, k: r}
+	}
 
 	return y
 }

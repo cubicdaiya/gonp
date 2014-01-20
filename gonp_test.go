@@ -183,3 +183,15 @@ func TestDiffMultiByteString(t *testing.T) {
 	assert(t, lcs == "久保彦")
 	assert(t, equalsSesElemArray(ses, ses_))
 }
+
+func TestDiffOnlyEditdistance(t *testing.T) {
+	diff := New("abc", "abd")
+	diff.OnlyEd()
+	diff.Compose()
+	lcs := diff.Lcs()
+	ses := diff.Ses()
+	ses_ := []SesElem{}
+	assert(t, diff.Editdistance() == 2)
+	assert(t, lcs == "")
+	assert(t, equalsSesElemArray(ses, ses_))
+}
