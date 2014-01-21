@@ -7,7 +7,7 @@ gonp is a diff algorithm implementation in Go.
 # How To
 
 ```go
-diff := New("abc", "abd")
+diff := gonp.New("abc", "abd")
 diff.Compose()
 ed := diff.Editdistance() // ed is 2
 lcs := diff.Lcs() // lcs is "ab"
