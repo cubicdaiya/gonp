@@ -5,6 +5,7 @@ package gonp
 
 import (
 	"container/list"
+	"fmt"
 	"math"
 	"unicode/utf8"
 )
@@ -88,6 +89,20 @@ func (diff *Diff) Ses() []SesElem {
 		seq[i].t = e.Value.(SesElem).t
 	}
 	return seq
+}
+
+func (diff *Diff) PrintSes(add, del, common string) {
+	for _, e := 0, diff.ses.Front(); e != nil; e = e.Next() {
+		ee := e.Value.(SesElem)
+		switch ee.t {
+		case Delete:
+			fmt.Println(del + " " + string(ee.c))
+		case Add:
+			fmt.Println(add + " " + string(ee.c))
+		case Common:
+			fmt.Println(common + " " + string(ee.c))
+		}
+	}
 }
 
 func (diff *Diff) Compose() {
