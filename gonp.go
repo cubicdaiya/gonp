@@ -114,24 +114,23 @@ func (diff *Diff) Compose() {
 	diff.ctl.pathposi = make(map[int]Point)
 	diff.lcs = list.New()
 	diff.ses = list.New()
-	ctl := diff.ctl
 
 	for i := range fp {
 		fp[i] = -1
-		ctl.path[i] = -1
+		diff.ctl.path[i] = -1
 	}
 
 	for p := 0; ; p++ {
 
 		for k := -p; k <= delta-1; k++ {
-			fp[k+offset] = diff.snake(k, fp[k-1+offset]+1, fp[k+1+offset], offset, diff.ctl)
+			fp[k+offset] = diff.snake(k, fp[k-1+offset]+1, fp[k+1+offset], offset)
 		}
 
 		for k := delta + p; k >= delta+1; k-- {
-			fp[k+offset] = diff.snake(k, fp[k-1+offset]+1, fp[k+1+offset], offset, diff.ctl)
+			fp[k+offset] = diff.snake(k, fp[k-1+offset]+1, fp[k+1+offset], offset)
 		}
 
-		fp[delta+offset] = diff.snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset], offset, diff.ctl)
+		fp[delta+offset] = diff.snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset], offset)
 
 		if fp[delta+offset] >= diff.n {
 			diff.ed = delta + 2*p
@@ -139,15 +138,15 @@ func (diff *Diff) Compose() {
 		}
 	}
 
-	if ctl.onlyEd {
+	if diff.ctl.onlyEd {
 		return
 	}
 
-	r := ctl.path[delta+offset]
+	r := diff.ctl.path[delta+offset]
 	epc := make(map[int]Point)
 	for r != -1 {
-		epc[len(epc)] = Point{x: ctl.pathposi[r].x, y: ctl.pathposi[r].y, k: -1}
-		r = ctl.pathposi[r].k
+		epc[len(epc)] = Point{x: diff.ctl.pathposi[r].x, y: diff.ctl.pathposi[r].y, k: -1}
+		r = diff.ctl.pathposi[r].k
 	}
 	diff.recordSeq(epc)
 }
@@ -193,12 +192,12 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 	}
 }
 
-func (diff *Diff) snake(k, p, pp, offset int, ctl *Ctl) int {
+func (diff *Diff) snake(k, p, pp, offset int) int {
 	r := 0
 	if p > pp {
-		r = ctl.path[k-1+offset]
+		r = diff.ctl.path[k-1+offset]
 	} else {
-		r = ctl.path[k+1+offset]
+		r = diff.ctl.path[k+1+offset]
 	}
 
 	y := max(p, pp)
@@ -209,9 +208,9 @@ func (diff *Diff) snake(k, p, pp, offset int, ctl *Ctl) int {
 		y++
 	}
 
-	if !ctl.onlyEd {
-		ctl.path[k+offset] = len(ctl.pathposi)
-		ctl.pathposi[len(ctl.pathposi)] = Point{x: x, y: y, k: r}
+	if !diff.ctl.onlyEd {
+		diff.ctl.path[k+offset] = len(diff.ctl.pathposi)
+		diff.ctl.pathposi[len(diff.ctl.pathposi)] = Point{x: x, y: y, k: r}
 	}
 
 	return y
