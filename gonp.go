@@ -149,6 +149,30 @@ func (diff *Diff) Compose() {
 	diff.recordSeq(epc)
 }
 
+func (diff *Diff) snake(k, p, pp, offset int) int {
+	r := 0
+	if p > pp {
+		r = diff.ctx.path[k-1+offset]
+	} else {
+		r = diff.ctx.path[k+1+offset]
+	}
+
+	y := max(p, pp)
+	x := y - k
+
+	for x < diff.m && y < diff.n && diff.a[x] == diff.b[y] {
+		x++
+		y++
+	}
+
+	if !diff.ctx.onlyEd {
+		diff.ctx.path[k+offset] = len(diff.ctx.pathposi)
+		diff.ctx.pathposi[len(diff.ctx.pathposi)] = Point{x: x, y: y, k: r}
+	}
+
+	return y
+}
+
 func (diff *Diff) recordSeq(epc map[int]Point) {
 	x_idx, y_idx := 1, 1
 	px_idx, py_idx := 0, 0
@@ -187,28 +211,4 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 			}
 		}
 	}
-}
-
-func (diff *Diff) snake(k, p, pp, offset int) int {
-	r := 0
-	if p > pp {
-		r = diff.ctx.path[k-1+offset]
-	} else {
-		r = diff.ctx.path[k+1+offset]
-	}
-
-	y := max(p, pp)
-	x := y - k
-
-	for x < diff.m && y < diff.n && diff.a[x] == diff.b[y] {
-		x++
-		y++
-	}
-
-	if !diff.ctx.onlyEd {
-		diff.ctx.path[k+offset] = len(diff.ctx.pathposi)
-		diff.ctx.pathposi[len(diff.ctx.pathposi)] = Point{x: x, y: y, k: r}
-	}
-
-	return y
 }
