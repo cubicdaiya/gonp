@@ -13,9 +13,9 @@ import (
 type SesType int
 
 const (
-	Delete SesType = 0
-	Common SesType = 1
-	Add    SesType = 2
+	Delete SesType = iota
+	Common
+	Add
 )
 
 type Point struct {
