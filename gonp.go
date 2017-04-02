@@ -10,13 +10,13 @@ import (
 	"unicode/utf8"
 )
 
-type SesType int
-
 const (
 	Delete SesType = iota
 	Common
 	Add
 )
+
+type SesType int
 
 type Point struct {
 	x, y, k int
@@ -32,12 +32,12 @@ type Diff struct {
 	b    []rune
 	m, n int
 	ed   int
-	ctl  *Ctl
+	ctx  *Ctx
 	lcs  *list.List
 	ses  *list.List
 }
 
-type Ctl struct {
+type Ctx struct {
 	reverse  bool
 	path     []int
 	onlyEd   bool
@@ -51,23 +51,23 @@ func max(x, y int) int {
 func New(a string, b string) *Diff {
 	m, n := utf8.RuneCountInString(a), utf8.RuneCountInString(b)
 	diff := new(Diff)
-	ctl := new(Ctl)
+	ctx := new(Ctx)
 	if m >= n {
 		diff.a, diff.b = []rune(b), []rune(a)
 		diff.m, diff.n = n, m
-		ctl.reverse = true
+		ctx.reverse = true
 	} else {
 		diff.a, diff.b = []rune(a), []rune(b)
 		diff.m, diff.n = m, n
-		ctl.reverse = false
+		ctx.reverse = false
 	}
-	ctl.onlyEd = false
-	diff.ctl = ctl
+	ctx.onlyEd = false
+	diff.ctx = ctx
 	return diff
 }
 
 func (diff *Diff) OnlyEd() {
-	diff.ctl.onlyEd = true
+	diff.ctx.onlyEd = true
 }
 
 func (diff *Diff) Editdistance() int {
@@ -110,14 +110,14 @@ func (diff *Diff) Compose() {
 	delta := diff.n - diff.m
 	size := diff.m + diff.n + 3
 	fp := make([]int, size)
-	diff.ctl.path = make([]int, size)
-	diff.ctl.pathposi = make(map[int]Point)
+	diff.ctx.path = make([]int, size)
+	diff.ctx.pathposi = make(map[int]Point)
 	diff.lcs = list.New()
 	diff.ses = list.New()
 
 	for i := range fp {
 		fp[i] = -1
-		diff.ctl.path[i] = -1
+		diff.ctx.path[i] = -1
 	}
 
 	for p := 0; ; p++ {
@@ -138,15 +138,15 @@ func (diff *Diff) Compose() {
 		}
 	}
 
-	if diff.ctl.onlyEd {
+	if diff.ctx.onlyEd {
 		return
 	}
 
-	r := diff.ctl.path[delta+offset]
+	r := diff.ctx.path[delta+offset]
 	epc := make(map[int]Point)
 	for r != -1 {
-		epc[len(epc)] = Point{x: diff.ctl.pathposi[r].x, y: diff.ctl.pathposi[r].y, k: -1}
-		r = diff.ctl.pathposi[r].k
+		epc[len(epc)] = Point{x: diff.ctx.pathposi[r].x, y: diff.ctx.pathposi[r].y, k: -1}
+		r = diff.ctx.pathposi[r].k
 	}
 	diff.recordSeq(epc)
 }
@@ -154,13 +154,13 @@ func (diff *Diff) Compose() {
 func (diff *Diff) recordSeq(epc map[int]Point) {
 	x_idx, y_idx := 1, 1
 	px_idx, py_idx := 0, 0
-	ctl := diff.ctl
+	ctx := diff.ctx
 	for i := len(epc) - 1; i >= 0; i-- {
 		for (px_idx < epc[i].x) || (py_idx < epc[i].y) {
 			var t SesType
 			if (epc[i].y - epc[i].x) > (py_idx - px_idx) {
 				elem := diff.b[py_idx]
-				if ctl.reverse {
+				if ctx.reverse {
 					t = Delete
 				} else {
 					t = Add
@@ -170,7 +170,7 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 				py_idx++
 			} else if epc[i].y-epc[i].x < py_idx-px_idx {
 				elem := diff.a[px_idx]
-				if ctl.reverse {
+				if ctx.reverse {
 					t = Add
 				} else {
 					t = Delete
@@ -195,9 +195,9 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 func (diff *Diff) snake(k, p, pp, offset int) int {
 	r := 0
 	if p > pp {
-		r = diff.ctl.path[k-1+offset]
+		r = diff.ctx.path[k-1+offset]
 	} else {
-		r = diff.ctl.path[k+1+offset]
+		r = diff.ctx.path[k+1+offset]
 	}
 
 	y := max(p, pp)
@@ -208,9 +208,9 @@ func (diff *Diff) snake(k, p, pp, offset int) int {
 		y++
 	}
 
-	if !diff.ctl.onlyEd {
-		diff.ctl.path[k+offset] = len(diff.ctl.pathposi)
-		diff.ctl.pathposi[len(diff.ctl.pathposi)] = Point{x: x, y: y, k: r}
+	if !diff.ctx.onlyEd {
+		diff.ctx.path[k+offset] = len(diff.ctx.pathposi)
+		diff.ctx.pathposi[len(diff.ctx.pathposi)] = Point{x: x, y: y, k: r}
 	}
 
 	return y
