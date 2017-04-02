@@ -28,8 +28,8 @@ type SesElem struct {
 }
 
 type Diff struct {
-	A    []rune
-	B    []rune
+	a    []rune
+	b    []rune
 	m, n int
 	ed   int
 	ctl  *Ctl
@@ -53,11 +53,11 @@ func New(a string, b string) *Diff {
 	diff := new(Diff)
 	ctl := new(Ctl)
 	if m >= n {
-		diff.A, diff.B = []rune(b), []rune(a)
+		diff.a, diff.b = []rune(b), []rune(a)
 		diff.m, diff.n = n, m
 		ctl.reverse = true
 	} else {
-		diff.A, diff.B = []rune(a), []rune(b)
+		diff.a, diff.b = []rune(a), []rune(b)
 		diff.m, diff.n = m, n
 		ctl.reverse = false
 	}
@@ -159,7 +159,7 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 		for (px_idx < epc[i].x) || (py_idx < epc[i].y) {
 			var t SesType
 			if (epc[i].y - epc[i].x) > (py_idx - px_idx) {
-				elem := diff.B[py_idx]
+				elem := diff.b[py_idx]
 				if ctl.reverse {
 					t = Delete
 				} else {
@@ -169,7 +169,7 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 				y_idx++
 				py_idx++
 			} else if epc[i].y-epc[i].x < py_idx-px_idx {
-				elem := diff.A[px_idx]
+				elem := diff.a[px_idx]
 				if ctl.reverse {
 					t = Add
 				} else {
@@ -179,7 +179,7 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 				x_idx++
 				px_idx++
 			} else {
-				elem := diff.A[px_idx]
+				elem := diff.a[px_idx]
 				t = Common
 				diff.lcs.PushBack(elem)
 				diff.ses.PushBack(SesElem{c: elem, t: t})
@@ -203,7 +203,7 @@ func (diff *Diff) snake(k, p, pp, offset int) int {
 	y := max(p, pp)
 	x := y - k
 
-	for x < diff.m && y < diff.n && diff.A[x] == diff.B[y] {
+	for x < diff.m && y < diff.n && diff.a[x] == diff.b[y] {
 		x++
 		y++
 	}
