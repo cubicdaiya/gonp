@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/cubicdaiya/gonp"
 	"os"
+
+	"github.com/cubicdaiya/gonp"
 )
 
 func main() {
