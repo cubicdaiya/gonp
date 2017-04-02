@@ -91,16 +91,16 @@ func (diff *Diff) Ses() []SesElem {
 	return seq
 }
 
-func (diff *Diff) PrintSes(add, del, common string) {
+func (diff *Diff) PrintSes() {
 	for _, e := 0, diff.ses.Front(); e != nil; e = e.Next() {
 		ee := e.Value.(SesElem)
 		switch ee.t {
 		case Delete:
-			fmt.Println(del + " " + string(ee.c))
+			fmt.Println("- " + string(ee.c))
 		case Add:
-			fmt.Println(add + " " + string(ee.c))
+			fmt.Println("+ " + string(ee.c))
 		case Common:
-			fmt.Println(common + " " + string(ee.c))
+			fmt.Println("  " + string(ee.c))
 		}
 	}
 }
