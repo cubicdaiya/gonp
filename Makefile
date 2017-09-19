@@ -6,3 +6,6 @@ fmt:
 
 check:
 	go test -v ./...
+
+clean:
+	rm -f strdiff
