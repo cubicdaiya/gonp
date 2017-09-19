@@ -38,13 +38,13 @@ type Diff struct {
 	b    []rune
 	m, n int
 	ed   int
-	ctx  Ctx
+	meta  Meta
 	lcs  *list.List
 	ses  *list.List
 }
 
-// Ctx is internal state for calculating difference
-type Ctx struct {
+// Meta is internal state for calculating difference
+type Meta struct {
 	reverse  bool
 	path     []int
 	onlyEd   bool
@@ -65,19 +65,19 @@ func New(a string, b string) *Diff {
 	if m >= n {
 		diff.a, diff.b = []rune(b), []rune(a)
 		diff.m, diff.n = n, m
-		diff.ctx.reverse = true
+		diff.meta.reverse = true
 	} else {
 		diff.a, diff.b = []rune(a), []rune(b)
 		diff.m, diff.n = m, n
-		diff.ctx.reverse = false
+		diff.meta.reverse = false
 	}
-	diff.ctx.onlyEd = false
+	diff.meta.onlyEd = false
 	return diff
 }
 
 // OnlyEd enables to calculate only edit distance
 func (diff *Diff) OnlyEd() {
-	diff.ctx.onlyEd = true
+	diff.meta.onlyEd = true
 }
 
 // Editdistance returns edit distance between a and b
@@ -125,14 +125,14 @@ func (diff *Diff) Compose() {
 	delta := diff.n - diff.m
 	size := diff.m + diff.n + 3
 	fp := make([]int, size)
-	diff.ctx.path = make([]int, size)
-	diff.ctx.pathposi = make(map[int]Point)
+	diff.meta.path = make([]int, size)
+	diff.meta.pathposi = make(map[int]Point)
 	diff.lcs = list.New()
 	diff.ses = list.New()
 
 	for i := range fp {
 		fp[i] = -1
-		diff.ctx.path[i] = -1
+		diff.meta.path[i] = -1
 	}
 
 	for p := 0; ; p++ {
@@ -153,15 +153,15 @@ func (diff *Diff) Compose() {
 		}
 	}
 
-	if diff.ctx.onlyEd {
+	if diff.meta.onlyEd {
 		return
 	}
 
-	r := diff.ctx.path[delta+offset]
+	r := diff.meta.path[delta+offset]
 	epc := make(map[int]Point)
 	for r != -1 {
-		epc[len(epc)] = Point{x: diff.ctx.pathposi[r].x, y: diff.ctx.pathposi[r].y, k: -1}
-		r = diff.ctx.pathposi[r].k
+		epc[len(epc)] = Point{x: diff.meta.pathposi[r].x, y: diff.meta.pathposi[r].y, k: -1}
+		r = diff.meta.pathposi[r].k
 	}
 	diff.recordSeq(epc)
 }
@@ -169,9 +169,9 @@ func (diff *Diff) Compose() {
 func (diff *Diff) snake(k, p, pp, offset int) int {
 	r := 0
 	if p > pp {
-		r = diff.ctx.path[k-1+offset]
+		r = diff.meta.path[k-1+offset]
 	} else {
-		r = diff.ctx.path[k+1+offset]
+		r = diff.meta.path[k+1+offset]
 	}
 
 	y := max(p, pp)
@@ -182,9 +182,9 @@ func (diff *Diff) snake(k, p, pp, offset int) int {
 		y++
 	}
 
-	if !diff.ctx.onlyEd {
-		diff.ctx.path[k+offset] = len(diff.ctx.pathposi)
-		diff.ctx.pathposi[len(diff.ctx.pathposi)] = Point{x: x, y: y, k: r}
+	if !diff.meta.onlyEd {
+		diff.meta.path[k+offset] = len(diff.meta.pathposi)
+		diff.meta.pathposi[len(diff.meta.pathposi)] = Point{x: x, y: y, k: r}
 	}
 
 	return y
@@ -198,7 +198,7 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 			var t SesType
 			if (epc[i].y - epc[i].x) > (pyIdx - pxIdx) {
 				elem := diff.b[pyIdx]
-				if diff.ctx.reverse {
+				if diff.meta.reverse {
 					t = SesDelete
 				} else {
 					t = SesAdd
@@ -208,7 +208,7 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 				pyIdx++
 			} else if epc[i].y-epc[i].x < pyIdx-pxIdx {
 				elem := diff.a[pxIdx]
-				if diff.ctx.reverse {
+				if diff.meta.reverse {
 					t = SesAdd
 				} else {
 					t = SesDelete
