@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	// Delete is manipulaton type of deleting element in SES
-	Delete SesType = iota
-	// Common is manipulaton type of same element in SES
-	Common
-	// Add is manipulaton type of adding element in SES
-	Add
+	// SesDelete is manipulaton type of deleting element in SES
+	SesDelete SesType = iota
+	// SesCommon is manipulaton type of same element in SES
+	SesCommon
+	// SesAdd is manipulaton type of adding element in SES
+	SesAdd
 )
 
 // SesType is manipulaton type
@@ -109,11 +109,11 @@ func (diff *Diff) PrintSes() {
 	for _, e := 0, diff.ses.Front(); e != nil; e = e.Next() {
 		ee := e.Value.(SesElem)
 		switch ee.t {
-		case Delete:
+		case SesDelete:
 			fmt.Println("- " + string(ee.c))
-		case Add:
+		case SesAdd:
 			fmt.Println("+ " + string(ee.c))
-		case Common:
+		case SesCommon:
 			fmt.Println("  " + string(ee.c))
 		}
 	}
@@ -199,9 +199,9 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 			if (epc[i].y - epc[i].x) > (pyIdx - pxIdx) {
 				elem := diff.b[pyIdx]
 				if diff.ctx.reverse {
-					t = Delete
+					t = SesDelete
 				} else {
-					t = Add
+					t = SesAdd
 				}
 				diff.ses.PushBack(SesElem{c: elem, t: t})
 				yIdx++
@@ -209,16 +209,16 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 			} else if epc[i].y-epc[i].x < pyIdx-pxIdx {
 				elem := diff.a[pxIdx]
 				if diff.ctx.reverse {
-					t = Add
+					t = SesAdd
 				} else {
-					t = Delete
+					t = SesDelete
 				}
 				diff.ses.PushBack(SesElem{c: elem, t: t})
 				xIdx++
 				pxIdx++
 			} else {
 				elem := diff.a[pxIdx]
-				t = Common
+				t = SesCommon
 				diff.lcs.PushBack(elem)
 				diff.ses.PushBack(SesElem{c: elem, t: t})
 				xIdx++
