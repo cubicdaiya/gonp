@@ -10,22 +10,29 @@ import (
 )
 
 const (
+	// Delete is manipulaton type of deleting element in SES
 	Delete SesType = iota
+	// Common is manipulaton type of same element in SES
 	Common
+	// Add is manipulaton type of adding element in SES
 	Add
 )
 
+// SesType is manipulaton type
 type SesType int
 
+// Point is coordinate in edit graph
 type Point struct {
 	x, y, k int
 }
 
+// SesElem is element of SES
 type SesElem struct {
 	c rune
 	t SesType
 }
 
+// Diff is context for calculating difference between a and b
 type Diff struct {
 	a    []rune
 	b    []rune
@@ -36,6 +43,7 @@ type Diff struct {
 	ses  *list.List
 }
 
+// Ctx is internal state for calculating difference
 type Ctx struct {
 	reverse  bool
 	path     []int
@@ -50,6 +58,7 @@ func max(x, y int) int {
 	return x
 }
 
+// New is initializer of Diff
 func New(a string, b string) *Diff {
 	m, n := utf8.RuneCountInString(a), utf8.RuneCountInString(b)
 	diff := new(Diff)
@@ -66,14 +75,17 @@ func New(a string, b string) *Diff {
 	return diff
 }
 
+// OnlyEd enables to calculate only edit distance
 func (diff *Diff) OnlyEd() {
 	diff.ctx.onlyEd = true
 }
 
+// Editdistance returns edit distance between a and b
 func (diff *Diff) Editdistance() int {
 	return diff.ed
 }
 
+// Lcs returns LCS (Longest Common Subsequence) between a and b
 func (diff *Diff) Lcs() string {
 	var b = make([]rune, diff.lcs.Len())
 	for i, e := 0, diff.lcs.Front(); e != nil; i, e = i+1, e.Next() {
@@ -82,6 +94,7 @@ func (diff *Diff) Lcs() string {
 	return string(b)
 }
 
+// Ses return SES (Shortest Edit Script) between a and b
 func (diff *Diff) Ses() []SesElem {
 	seq := make([]SesElem, diff.ses.Len())
 	for i, e := 0, diff.ses.Front(); e != nil; i, e = i+1, e.Next() {
@@ -91,6 +104,7 @@ func (diff *Diff) Ses() []SesElem {
 	return seq
 }
 
+// PrintSes prints shortest edit script between a and b
 func (diff *Diff) PrintSes() {
 	for _, e := 0, diff.ses.Front(); e != nil; e = e.Next() {
 		ee := e.Value.(SesElem)
@@ -105,6 +119,7 @@ func (diff *Diff) PrintSes() {
 	}
 }
 
+// Compose composes diff between a and b
 func (diff *Diff) Compose() {
 	offset := diff.m + 1
 	delta := diff.n - diff.m
@@ -176,40 +191,40 @@ func (diff *Diff) snake(k, p, pp, offset int) int {
 }
 
 func (diff *Diff) recordSeq(epc map[int]Point) {
-	x_idx, y_idx := 1, 1
-	px_idx, py_idx := 0, 0
+	xIdx, yIdx := 1, 1
+	pxIdx, pyIdx := 0, 0
 	for i := len(epc) - 1; i >= 0; i-- {
-		for (px_idx < epc[i].x) || (py_idx < epc[i].y) {
+		for (pxIdx < epc[i].x) || (pyIdx < epc[i].y) {
 			var t SesType
-			if (epc[i].y - epc[i].x) > (py_idx - px_idx) {
-				elem := diff.b[py_idx]
+			if (epc[i].y - epc[i].x) > (pyIdx - pxIdx) {
+				elem := diff.b[pyIdx]
 				if diff.ctx.reverse {
 					t = Delete
 				} else {
 					t = Add
 				}
 				diff.ses.PushBack(SesElem{c: elem, t: t})
-				y_idx++
-				py_idx++
-			} else if epc[i].y-epc[i].x < py_idx-px_idx {
-				elem := diff.a[px_idx]
+				yIdx++
+				pyIdx++
+			} else if epc[i].y-epc[i].x < pyIdx-pxIdx {
+				elem := diff.a[pxIdx]
 				if diff.ctx.reverse {
 					t = Add
 				} else {
 					t = Delete
 				}
 				diff.ses.PushBack(SesElem{c: elem, t: t})
-				x_idx++
-				px_idx++
+				xIdx++
+				pxIdx++
 			} else {
-				elem := diff.a[px_idx]
+				elem := diff.a[pxIdx]
 				t = Common
 				diff.lcs.PushBack(elem)
 				diff.ses.PushBack(SesElem{c: elem, t: t})
-				x_idx++
-				y_idx++
-				px_idx++
-				py_idx++
+				xIdx++
+				yIdx++
+				pxIdx++
+				pyIdx++
 			}
 		}
 	}

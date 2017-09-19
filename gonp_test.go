@@ -27,8 +27,8 @@ func TestDiff1(t *testing.T) {
 	diff := New("abc", "abd")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: 'a', t: Common},
 		{c: 'b', t: Common},
 		{c: 'c', t: Delete},
@@ -36,15 +36,15 @@ func TestDiff1(t *testing.T) {
 	}
 	assert(t, diff.Editdistance() == 2)
 	assert(t, lcs == "ab")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiff2(t *testing.T) {
 	diff := New("abcdef", "dacfea")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: 'd', t: Add},
 		{c: 'a', t: Common},
 		{c: 'b', t: Delete},
@@ -57,15 +57,15 @@ func TestDiff2(t *testing.T) {
 	}
 	assert(t, diff.Editdistance() == 6)
 	assert(t, lcs == "acf")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiff3(t *testing.T) {
 	diff := New("acbdeacbed", "acebdabbabed")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: 'a', t: Common},
 		{c: 'c', t: Common},
 		{c: 'e', t: Add},
@@ -83,15 +83,15 @@ func TestDiff3(t *testing.T) {
 	}
 	assert(t, diff.Editdistance() == 6)
 	assert(t, lcs == "acbdabed")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiff4(t *testing.T) {
 	diff := New("abcbda", "bdcaba")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: 'a', t: Delete},
 		{c: 'b', t: Common},
 		{c: 'd', t: Add},
@@ -103,15 +103,15 @@ func TestDiff4(t *testing.T) {
 	}
 	assert(t, diff.Editdistance() == 4)
 	assert(t, lcs == "bcba")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiff5(t *testing.T) {
 	diff := New("bokko", "bokkko")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: 'b', t: Common},
 		{c: 'o', t: Common},
 		{c: 'k', t: Common},
@@ -121,52 +121,52 @@ func TestDiff5(t *testing.T) {
 	}
 	assert(t, diff.Editdistance() == 1)
 	assert(t, lcs == "bokko")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiffEmptyString1(t *testing.T) {
 	diff := New("", "")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{}
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{}
 	assert(t, diff.Editdistance() == 0)
 	assert(t, lcs == "")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiffEmptyString2(t *testing.T) {
 	diff := New("a", "")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: 'a', t: Delete},
 	}
 	assert(t, diff.Editdistance() == 1)
 	assert(t, lcs == "")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiffEmptyString3(t *testing.T) {
 	diff := New("", "b")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: 'b', t: Add},
 	}
 	assert(t, diff.Editdistance() == 1)
 	assert(t, lcs == "")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiffMultiByteString(t *testing.T) {
 	diff := New("久保竜彦", "久保達彦")
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{
 		{c: '久', t: Common},
 		{c: '保', t: Common},
 		{c: '竜', t: Delete},
@@ -175,7 +175,7 @@ func TestDiffMultiByteString(t *testing.T) {
 	}
 	assert(t, diff.Editdistance() == 2)
 	assert(t, lcs == "久保彦")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiffOnlyEditdistance(t *testing.T) {
@@ -183,9 +183,9 @@ func TestDiffOnlyEditdistance(t *testing.T) {
 	diff.OnlyEd()
 	diff.Compose()
 	lcs := diff.Lcs()
-	ses := diff.Ses()
-	ses_ := []SesElem{}
+	sesActual := diff.Ses()
+	sesExpected := []SesElem{}
 	assert(t, diff.Editdistance() == 2)
 	assert(t, lcs == "")
-	assert(t, equalsSesElemArray(ses, ses_))
+	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
