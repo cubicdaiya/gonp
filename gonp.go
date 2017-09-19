@@ -6,7 +6,6 @@ package gonp
 import (
 	"container/list"
 	"fmt"
-	"math"
 	"unicode/utf8"
 )
 
@@ -45,7 +44,10 @@ type Ctx struct {
 }
 
 func max(x, y int) int {
-	return int(math.Max(float64(x), float64(y)))
+	if x < y {
+		return y
+	}
+	return x
 }
 
 func New(a string, b string) *Diff {
