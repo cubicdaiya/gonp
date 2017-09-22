@@ -13,7 +13,7 @@ An O(NP) Sequence Comparison Algorithm(following, Wu's O(NP) Algorithm) is the e
 
 The computational complexity of Wu's O(NP) Algorithm is averagely O(N+PD), in the worst case, is O(NP).
 
-# Example
+# How to
 
 ```go
 diff := gonp.New("abc", "abd")
@@ -28,4 +28,19 @@ ses := diff.Ses()
 //        {c: 'c', t: Delete},
 //        {c: 'd', t: Add},
 //        }
+```
+
+# Example
+
+```
+$ make strdiff
+go build -o strdiff examples/strdiff.go
+$ ./strdiff abc abd
+Editdistance: 2
+LCS: ab
+SES:
+  a
+  b
+- c
++ d
 ```
