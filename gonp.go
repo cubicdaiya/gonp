@@ -38,7 +38,7 @@ type Diff struct {
 	b    []rune
 	m, n int
 	ed   int
-	meta  Meta
+	meta Meta
 	lcs  *list.List
 	ses  *list.List
 }
@@ -110,11 +110,11 @@ func (diff *Diff) PrintSes() {
 		ee := e.Value.(SesElem)
 		switch ee.t {
 		case SesDelete:
-			fmt.Println("- " + string(ee.c))
+			fmt.Printf("- %c\n", ee.c)
 		case SesAdd:
-			fmt.Println("+ " + string(ee.c))
+			fmt.Printf("+ %c\n", ee.c)
 		case SesCommon:
-			fmt.Println("  " + string(ee.c))
+			fmt.Printf("  %c\n", ee.c)
 		}
 	}
 }
