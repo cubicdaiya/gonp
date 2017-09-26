@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/cubicdaiya/gonp"
@@ -9,8 +10,7 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Println("./strdiff arg1 arg2")
-		os.Exit(1)
+		log.Fatal("./strdiff arg1 arg2")
 	}
 	diff := gonp.New(os.Args[1], os.Args[2])
 	diff.Compose()
