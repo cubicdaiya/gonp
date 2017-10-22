@@ -62,14 +62,13 @@ func max(x, y int) int {
 func New(a string, b string) *Diff {
 	m, n := utf8.RuneCountInString(a), utf8.RuneCountInString(b)
 	diff := new(Diff)
+	diff.a, diff.b = []rune(a), []rune(b)
+	diff.m, diff.n = m, n
+	diff.meta.reverse = false
 	if m >= n {
-		diff.a, diff.b = []rune(b), []rune(a)
+		diff.a, diff.b = diff.b, diff.a
 		diff.m, diff.n = n, m
 		diff.meta.reverse = true
-	} else {
-		diff.a, diff.b = []rune(a), []rune(b)
-		diff.m, diff.n = m, n
-		diff.meta.reverse = false
 	}
 	diff.meta.onlyEd = false
 	return diff
