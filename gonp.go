@@ -194,32 +194,28 @@ func (diff *Diff) recordSeq(epc map[int]Point) {
 	pxIdx, pyIdx := 0, 0
 	for i := len(epc) - 1; i >= 0; i-- {
 		for (pxIdx < epc[i].x) || (pyIdx < epc[i].y) {
-			var t SesType
 			if (epc[i].y - epc[i].x) > (pyIdx - pxIdx) {
 				elem := diff.b[pyIdx]
+				t := SesAdd
 				if diff.meta.reverse {
 					t = SesDelete
-				} else {
-					t = SesAdd
 				}
 				diff.ses.PushBack(SesElem{c: elem, t: t})
 				yIdx++
 				pyIdx++
 			} else if epc[i].y-epc[i].x < pyIdx-pxIdx {
 				elem := diff.a[pxIdx]
+				t := SesDelete
 				if diff.meta.reverse {
 					t = SesAdd
-				} else {
-					t = SesDelete
 				}
 				diff.ses.PushBack(SesElem{c: elem, t: t})
 				xIdx++
 				pxIdx++
 			} else {
 				elem := diff.a[pxIdx]
-				t = SesCommon
 				diff.lcs.PushBack(elem)
-				diff.ses.PushBack(SesElem{c: elem, t: t})
+				diff.ses.PushBack(SesElem{c: elem, t: SesCommon})
 				xIdx++
 				yIdx++
 				pxIdx++
