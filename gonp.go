@@ -120,11 +120,8 @@ func (diff *Diff) PrintSes() {
 
 // Compose composes diff between a and b
 func (diff *Diff) Compose() {
-	offset := diff.m + 1
-	delta := diff.n - diff.m
-	size := diff.m + diff.n + 3
-	fp := make([]int, size)
-	diff.meta.path = make([]int, size)
+	fp := make([]int, diff.m+diff.n+3)
+	diff.meta.path = make([]int, diff.m+diff.n+3)
 	diff.meta.pathposi = make(map[int]Point)
 	diff.lcs = list.New()
 	diff.ses = list.New()
@@ -134,6 +131,8 @@ func (diff *Diff) Compose() {
 		diff.meta.path[i] = -1
 	}
 
+	offset := diff.m + 1
+	delta := diff.n - diff.m
 	for p := 0; ; p++ {
 
 		for k := -p; k <= delta-1; k++ {
