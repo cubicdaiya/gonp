@@ -23,7 +23,12 @@ type SesType int
 
 // Point is coordinate in edit graph
 type Point struct {
-	x, y, k int
+	x, y int
+}
+
+// PointCordinate is coordinate in edit graph attached route
+type PointCordinate struct {
+	x, y, r int
 }
 
 // SesElem is element of SES
@@ -45,10 +50,10 @@ type Diff struct {
 
 // Meta is internal state for calculating difference
 type Meta struct {
-	reverse  bool
-	path     []int
-	onlyEd   bool
-	pathposi map[int]Point
+	reverse       bool
+	path          []int
+	onlyEd        bool
+	pathCordinate []PointCordinate
 }
 
 func max(x, y int) int {
@@ -122,7 +127,7 @@ func (diff *Diff) PrintSes() {
 func (diff *Diff) Compose() {
 	fp := make([]int, diff.m+diff.n+3)
 	diff.meta.path = make([]int, diff.m+diff.n+3)
-	diff.meta.pathposi = make(map[int]Point)
+	diff.meta.pathCordinate = make([]PointCordinate, 0)
 	diff.lcs = list.New()
 	diff.ses = list.New()
 
@@ -156,10 +161,10 @@ func (diff *Diff) Compose() {
 	}
 
 	r := diff.meta.path[delta+offset]
-	epc := make(map[int]Point)
+	epc := make([]Point, 0)
 	for r != -1 {
-		epc[len(epc)] = Point{x: diff.meta.pathposi[r].x, y: diff.meta.pathposi[r].y, k: -1}
-		r = diff.meta.pathposi[r].k
+		epc = append(epc, Point{x: diff.meta.pathCordinate[r].x, y: diff.meta.pathCordinate[r].y})
+		r = diff.meta.pathCordinate[r].r
 	}
 	diff.recordSeq(epc)
 }
@@ -181,14 +186,14 @@ func (diff *Diff) snake(k, p, pp, offset int) int {
 	}
 
 	if !diff.meta.onlyEd {
-		diff.meta.path[k+offset] = len(diff.meta.pathposi)
-		diff.meta.pathposi[len(diff.meta.pathposi)] = Point{x: x, y: y, k: r}
+		diff.meta.path[k+offset] = len(diff.meta.pathCordinate)
+		diff.meta.pathCordinate = append(diff.meta.pathCordinate, PointCordinate{x, y, r})
 	}
 
 	return y
 }
 
-func (diff *Diff) recordSeq(epc map[int]Point) {
+func (diff *Diff) recordSeq(epc []Point) {
 	xIdx, yIdx := 1, 1
 	pxIdx, pyIdx := 0, 0
 	for i := len(epc) - 1; i >= 0; i-- {
