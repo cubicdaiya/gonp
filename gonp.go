@@ -38,17 +38,12 @@ type SesElem struct {
 
 // Diff is context for calculating difference between a and b
 type Diff struct {
-	a    []rune
-	b    []rune
-	m, n int
-	ed   int
-	lcs  []rune
-	ses  []SesElem
-	meta Meta
-}
-
-// Meta is internal state for calculating difference
-type Meta struct {
+	a              []rune
+	b              []rune
+	m, n           int
+	ed             int
+	lcs            []rune
+	ses            []SesElem
 	reverse        bool
 	path           []int
 	onlyEd         bool
@@ -68,19 +63,19 @@ func New(a string, b string) *Diff {
 	diff := new(Diff)
 	diff.a, diff.b = []rune(a), []rune(b)
 	diff.m, diff.n = m, n
-	diff.meta.reverse = false
+	diff.reverse = false
 	if m >= n {
 		diff.a, diff.b = diff.b, diff.a
 		diff.m, diff.n = n, m
-		diff.meta.reverse = true
+		diff.reverse = true
 	}
-	diff.meta.onlyEd = false
+	diff.onlyEd = false
 	return diff
 }
 
 // OnlyEd enables to calculate only edit distance
 func (diff *Diff) OnlyEd() {
-	diff.meta.onlyEd = true
+	diff.onlyEd = true
 }
 
 // Editdistance returns edit distance between a and b
@@ -120,12 +115,12 @@ func (diff *Diff) PrintSes() {
 // Compose composes diff between a and b
 func (diff *Diff) Compose() {
 	fp := make([]int, diff.m+diff.n+3)
-	diff.meta.path = make([]int, diff.m+diff.n+3)
-	diff.meta.pointWithRoute = make([]PointWithRoute, 0)
+	diff.path = make([]int, diff.m+diff.n+3)
+	diff.pointWithRoute = make([]PointWithRoute, 0)
 
 	for i := range fp {
 		fp[i] = -1
-		diff.meta.path[i] = -1
+		diff.path[i] = -1
 	}
 
 	offset := diff.m + 1
@@ -148,15 +143,15 @@ func (diff *Diff) Compose() {
 		}
 	}
 
-	if diff.meta.onlyEd {
+	if diff.onlyEd {
 		return
 	}
 
-	r := diff.meta.path[delta+offset]
+	r := diff.path[delta+offset]
 	epc := make([]Point, 0)
 	for r != -1 {
-		epc = append(epc, Point{x: diff.meta.pointWithRoute[r].x, y: diff.meta.pointWithRoute[r].y})
-		r = diff.meta.pointWithRoute[r].r
+		epc = append(epc, Point{x: diff.pointWithRoute[r].x, y: diff.pointWithRoute[r].y})
+		r = diff.pointWithRoute[r].r
 	}
 	diff.recordSeq(epc)
 }
@@ -164,9 +159,9 @@ func (diff *Diff) Compose() {
 func (diff *Diff) snake(k, p, pp, offset int) int {
 	r := 0
 	if p > pp {
-		r = diff.meta.path[k-1+offset]
+		r = diff.path[k-1+offset]
 	} else {
-		r = diff.meta.path[k+1+offset]
+		r = diff.path[k+1+offset]
 	}
 
 	y := max(p, pp)
@@ -177,9 +172,9 @@ func (diff *Diff) snake(k, p, pp, offset int) int {
 		y++
 	}
 
-	if !diff.meta.onlyEd {
-		diff.meta.path[k+offset] = len(diff.meta.pointWithRoute)
-		diff.meta.pointWithRoute = append(diff.meta.pointWithRoute, PointWithRoute{x: x, y: y, r: r})
+	if !diff.onlyEd {
+		diff.path[k+offset] = len(diff.pointWithRoute)
+		diff.pointWithRoute = append(diff.pointWithRoute, PointWithRoute{x: x, y: y, r: r})
 	}
 
 	return y
@@ -192,7 +187,7 @@ func (diff *Diff) recordSeq(epc []Point) {
 		for (px < epc[i].x) || (py < epc[i].y) {
 			if (epc[i].y - epc[i].x) > (py - px) {
 				t := SesAdd
-				if diff.meta.reverse {
+				if diff.reverse {
 					t = SesDelete
 				}
 				diff.ses = append(diff.ses, SesElem{c: diff.b[py], t: t})
@@ -200,7 +195,7 @@ func (diff *Diff) recordSeq(epc []Point) {
 				py++
 			} else if epc[i].y-epc[i].x < py-px {
 				t := SesDelete
-				if diff.meta.reverse {
+				if diff.reverse {
 					t = SesAdd
 				}
 				diff.ses = append(diff.ses, SesElem{c: diff.a[px], t: t})
