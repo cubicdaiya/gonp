@@ -10,7 +10,7 @@ func equalsSesElemArray(ses1, ses2 []SesElem) bool {
 		return true
 	}
 	for i := 0; i < m; i++ {
-		if ses1[i].c != ses2[i].c || ses1[i].t != ses2[i].t {
+		if ses1[i].e != ses2[i].e || ses1[i].t != ses2[i].t {
 			return false
 		}
 	}
@@ -29,10 +29,10 @@ func TestDiff1(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: 'a', t: SesCommon},
-		{c: 'b', t: SesCommon},
-		{c: 'c', t: SesDelete},
-		{c: 'd', t: SesAdd},
+		{e: 'a', t: SesCommon},
+		{e: 'b', t: SesCommon},
+		{e: 'c', t: SesDelete},
+		{e: 'd', t: SesAdd},
 	}
 	assert(t, diff.Editdistance() == 2)
 	assert(t, lcs == "ab")
@@ -45,15 +45,15 @@ func TestDiff2(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: 'd', t: SesAdd},
-		{c: 'a', t: SesCommon},
-		{c: 'b', t: SesDelete},
-		{c: 'c', t: SesCommon},
-		{c: 'd', t: SesDelete},
-		{c: 'e', t: SesDelete},
-		{c: 'f', t: SesCommon},
-		{c: 'e', t: SesAdd},
-		{c: 'a', t: SesAdd},
+		{e: 'd', t: SesAdd},
+		{e: 'a', t: SesCommon},
+		{e: 'b', t: SesDelete},
+		{e: 'c', t: SesCommon},
+		{e: 'd', t: SesDelete},
+		{e: 'e', t: SesDelete},
+		{e: 'f', t: SesCommon},
+		{e: 'e', t: SesAdd},
+		{e: 'a', t: SesAdd},
 	}
 	assert(t, diff.Editdistance() == 6)
 	assert(t, lcs == "acf")
@@ -66,20 +66,20 @@ func TestDiff3(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: 'a', t: SesCommon},
-		{c: 'c', t: SesCommon},
-		{c: 'e', t: SesAdd},
-		{c: 'b', t: SesCommon},
-		{c: 'd', t: SesCommon},
-		{c: 'e', t: SesDelete},
-		{c: 'a', t: SesCommon},
-		{c: 'c', t: SesDelete},
-		{c: 'b', t: SesCommon},
-		{c: 'b', t: SesAdd},
-		{c: 'a', t: SesAdd},
-		{c: 'b', t: SesAdd},
-		{c: 'e', t: SesCommon},
-		{c: 'd', t: SesCommon},
+		{e: 'a', t: SesCommon},
+		{e: 'c', t: SesCommon},
+		{e: 'e', t: SesAdd},
+		{e: 'b', t: SesCommon},
+		{e: 'd', t: SesCommon},
+		{e: 'e', t: SesDelete},
+		{e: 'a', t: SesCommon},
+		{e: 'c', t: SesDelete},
+		{e: 'b', t: SesCommon},
+		{e: 'b', t: SesAdd},
+		{e: 'a', t: SesAdd},
+		{e: 'b', t: SesAdd},
+		{e: 'e', t: SesCommon},
+		{e: 'd', t: SesCommon},
 	}
 	assert(t, diff.Editdistance() == 6)
 	assert(t, lcs == "acbdabed")
@@ -92,14 +92,14 @@ func TestDiff4(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: 'a', t: SesDelete},
-		{c: 'b', t: SesCommon},
-		{c: 'd', t: SesAdd},
-		{c: 'c', t: SesCommon},
-		{c: 'a', t: SesAdd},
-		{c: 'b', t: SesCommon},
-		{c: 'd', t: SesDelete},
-		{c: 'a', t: SesCommon},
+		{e: 'a', t: SesDelete},
+		{e: 'b', t: SesCommon},
+		{e: 'd', t: SesAdd},
+		{e: 'c', t: SesCommon},
+		{e: 'a', t: SesAdd},
+		{e: 'b', t: SesCommon},
+		{e: 'd', t: SesDelete},
+		{e: 'a', t: SesCommon},
 	}
 	assert(t, diff.Editdistance() == 4)
 	assert(t, lcs == "bcba")
@@ -112,12 +112,12 @@ func TestDiff5(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: 'b', t: SesCommon},
-		{c: 'o', t: SesCommon},
-		{c: 'k', t: SesCommon},
-		{c: 'k', t: SesCommon},
-		{c: 'k', t: SesAdd},
-		{c: 'o', t: SesCommon},
+		{e: 'b', t: SesCommon},
+		{e: 'o', t: SesCommon},
+		{e: 'k', t: SesCommon},
+		{e: 'k', t: SesCommon},
+		{e: 'k', t: SesAdd},
+		{e: 'o', t: SesCommon},
 	}
 	assert(t, diff.Editdistance() == 1)
 	assert(t, lcs == "bokko")
@@ -141,7 +141,7 @@ func TestDiffEmptyString2(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: 'a', t: SesDelete},
+		{e: 'a', t: SesDelete},
 	}
 	assert(t, diff.Editdistance() == 1)
 	assert(t, lcs == "")
@@ -154,7 +154,7 @@ func TestDiffEmptyString3(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: 'b', t: SesAdd},
+		{e: 'b', t: SesAdd},
 	}
 	assert(t, diff.Editdistance() == 1)
 	assert(t, lcs == "")
@@ -167,11 +167,11 @@ func TestDiffMultiByteString(t *testing.T) {
 	lcs := diff.LcsString()
 	sesActual := diff.Ses()
 	sesExpected := []SesElem{
-		{c: '久', t: SesCommon},
-		{c: '保', t: SesCommon},
-		{c: '竜', t: SesDelete},
-		{c: '達', t: SesAdd},
-		{c: '彦', t: SesCommon},
+		{e: '久', t: SesCommon},
+		{e: '保', t: SesCommon},
+		{e: '竜', t: SesDelete},
+		{e: '達', t: SesAdd},
+		{e: '彦', t: SesCommon},
 	}
 	assert(t, diff.Editdistance() == 2)
 	assert(t, lcs == "久保彦")

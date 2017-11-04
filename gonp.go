@@ -32,7 +32,7 @@ type PointWithRoute struct {
 
 // SesElem is element of SES
 type SesElem struct {
-	c rune
+	e rune
 	t SesType
 }
 
@@ -103,11 +103,11 @@ func (diff *Diff) PrintSes() {
 	for _, e := range diff.ses {
 		switch e.t {
 		case SesDelete:
-			fmt.Printf("- %c\n", e.c)
+			fmt.Printf("- %c\n", e.e)
 		case SesAdd:
-			fmt.Printf("+ %c\n", e.c)
+			fmt.Printf("+ %c\n", e.e)
 		case SesCommon:
-			fmt.Printf("  %c\n", e.c)
+			fmt.Printf("  %c\n", e.e)
 		}
 	}
 }
@@ -190,7 +190,7 @@ func (diff *Diff) recordSeq(epc []Point) {
 				if diff.reverse {
 					t = SesDelete
 				}
-				diff.ses = append(diff.ses, SesElem{c: diff.b[py], t: t})
+				diff.ses = append(diff.ses, SesElem{e: diff.b[py], t: t})
 				y++
 				py++
 			} else if epc[i].y-epc[i].x < py-px {
@@ -198,12 +198,12 @@ func (diff *Diff) recordSeq(epc []Point) {
 				if diff.reverse {
 					t = SesAdd
 				}
-				diff.ses = append(diff.ses, SesElem{c: diff.a[px], t: t})
+				diff.ses = append(diff.ses, SesElem{e: diff.a[px], t: t})
 				x++
 				px++
 			} else {
 				diff.lcs = append(diff.lcs, diff.a[px])
-				diff.ses = append(diff.ses, SesElem{c: diff.a[px], t: SesCommon})
+				diff.ses = append(diff.ses, SesElem{e: diff.a[px], t: SesCommon})
 				x++
 				y++
 				px++
