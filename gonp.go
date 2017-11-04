@@ -4,7 +4,6 @@
 package gonp
 
 import (
-	"container/list"
 	"fmt"
 	"unicode/utf8"
 )
@@ -26,8 +25,8 @@ type Point struct {
 	x, y int
 }
 
-// PointCordinate is coordinate in edit graph attached route
-type PointCordinate struct {
+// PointWithRoute is coordinate in edit graph attached route
+type PointWithRoute struct {
 	x, y, r int
 }
 
@@ -43,17 +42,17 @@ type Diff struct {
 	b    []rune
 	m, n int
 	ed   int
+	lcs  []rune
+	ses  []SesElem
 	meta Meta
-	lcs  *list.List
-	ses  *list.List
 }
 
 // Meta is internal state for calculating difference
 type Meta struct {
-	reverse       bool
-	path          []int
-	onlyEd        bool
-	pathCordinate []PointCordinate
+	reverse        bool
+	path           []int
+	onlyEd         bool
+	pointWithRoute []PointWithRoute
 }
 
 func max(x, y int) int {
@@ -91,34 +90,24 @@ func (diff *Diff) Editdistance() int {
 
 // Lcs returns LCS (Longest Common Subsequence) between a and b
 func (diff *Diff) Lcs() string {
-	var b = make([]rune, diff.lcs.Len())
-	for i, e := 0, diff.lcs.Front(); e != nil; i, e = i+1, e.Next() {
-		b[i] = e.Value.(rune)
-	}
-	return string(b)
+	return string(diff.lcs)
 }
 
 // Ses return SES (Shortest Edit Script) between a and b
 func (diff *Diff) Ses() []SesElem {
-	seq := make([]SesElem, diff.ses.Len())
-	for i, e := 0, diff.ses.Front(); e != nil; i, e = i+1, e.Next() {
-		seq[i].c = e.Value.(SesElem).c
-		seq[i].t = e.Value.(SesElem).t
-	}
-	return seq
+	return diff.ses
 }
 
 // PrintSes prints shortest edit script between a and b
 func (diff *Diff) PrintSes() {
-	for _, e := 0, diff.ses.Front(); e != nil; e = e.Next() {
-		ee := e.Value.(SesElem)
-		switch ee.t {
+	for _, e := range diff.ses {
+		switch e.t {
 		case SesDelete:
-			fmt.Printf("- %c\n", ee.c)
+			fmt.Printf("- %c\n", e.c)
 		case SesAdd:
-			fmt.Printf("+ %c\n", ee.c)
+			fmt.Printf("+ %c\n", e.c)
 		case SesCommon:
-			fmt.Printf("  %c\n", ee.c)
+			fmt.Printf("  %c\n", e.c)
 		}
 	}
 }
@@ -127,9 +116,7 @@ func (diff *Diff) PrintSes() {
 func (diff *Diff) Compose() {
 	fp := make([]int, diff.m+diff.n+3)
 	diff.meta.path = make([]int, diff.m+diff.n+3)
-	diff.meta.pathCordinate = make([]PointCordinate, 0)
-	diff.lcs = list.New()
-	diff.ses = list.New()
+	diff.meta.pointWithRoute = make([]PointWithRoute, 0)
 
 	for i := range fp {
 		fp[i] = -1
@@ -163,8 +150,8 @@ func (diff *Diff) Compose() {
 	r := diff.meta.path[delta+offset]
 	epc := make([]Point, 0)
 	for r != -1 {
-		epc = append(epc, Point{x: diff.meta.pathCordinate[r].x, y: diff.meta.pathCordinate[r].y})
-		r = diff.meta.pathCordinate[r].r
+		epc = append(epc, Point{x: diff.meta.pointWithRoute[r].x, y: diff.meta.pointWithRoute[r].y})
+		r = diff.meta.pointWithRoute[r].r
 	}
 	diff.recordSeq(epc)
 }
@@ -186,44 +173,41 @@ func (diff *Diff) snake(k, p, pp, offset int) int {
 	}
 
 	if !diff.meta.onlyEd {
-		diff.meta.path[k+offset] = len(diff.meta.pathCordinate)
-		diff.meta.pathCordinate = append(diff.meta.pathCordinate, PointCordinate{x, y, r})
+		diff.meta.path[k+offset] = len(diff.meta.pointWithRoute)
+		diff.meta.pointWithRoute = append(diff.meta.pointWithRoute, PointWithRoute{x: x, y: y, r: r})
 	}
 
 	return y
 }
 
 func (diff *Diff) recordSeq(epc []Point) {
-	xIdx, yIdx := 1, 1
-	pxIdx, pyIdx := 0, 0
+	x, y := 1, 1
+	px, py := 0, 0
 	for i := len(epc) - 1; i >= 0; i-- {
-		for (pxIdx < epc[i].x) || (pyIdx < epc[i].y) {
-			if (epc[i].y - epc[i].x) > (pyIdx - pxIdx) {
-				elem := diff.b[pyIdx]
+		for (px < epc[i].x) || (py < epc[i].y) {
+			if (epc[i].y - epc[i].x) > (py - px) {
 				t := SesAdd
 				if diff.meta.reverse {
 					t = SesDelete
 				}
-				diff.ses.PushBack(SesElem{c: elem, t: t})
-				yIdx++
-				pyIdx++
-			} else if epc[i].y-epc[i].x < pyIdx-pxIdx {
-				elem := diff.a[pxIdx]
+				diff.ses = append(diff.ses, SesElem{c: diff.b[py], t: t})
+				y++
+				py++
+			} else if epc[i].y-epc[i].x < py-px {
 				t := SesDelete
 				if diff.meta.reverse {
 					t = SesAdd
 				}
-				diff.ses.PushBack(SesElem{c: elem, t: t})
-				xIdx++
-				pxIdx++
+				diff.ses = append(diff.ses, SesElem{c: diff.a[px], t: t})
+				x++
+				px++
 			} else {
-				elem := diff.a[pxIdx]
-				diff.lcs.PushBack(elem)
-				diff.ses.PushBack(SesElem{c: elem, t: SesCommon})
-				xIdx++
-				yIdx++
-				pxIdx++
-				pyIdx++
+				diff.lcs = append(diff.lcs, diff.a[px])
+				diff.ses = append(diff.ses, SesElem{c: diff.a[px], t: SesCommon})
+				x++
+				y++
+				px++
+				py++
 			}
 		}
 	}
