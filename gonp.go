@@ -58,7 +58,7 @@ func max(x, y int) int {
 }
 
 // New is initializer of Diff
-func New(a string, b string) *Diff {
+func New(a, b string) *Diff {
 	m, n := utf8.RuneCountInString(a), utf8.RuneCountInString(b)
 	diff := new(Diff)
 	diff.a, diff.b = []rune(a), []rune(b)
