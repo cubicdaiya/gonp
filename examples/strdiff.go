@@ -15,7 +15,7 @@ func main() {
 	diff := gonp.New(os.Args[1], os.Args[2])
 	diff.Compose()
 	fmt.Printf("Editdistance: %d\n", diff.Editdistance())
-	fmt.Printf("LCS: %s\n", diff.Lcs())
+	fmt.Printf("LCS: %s\n", diff.LcsString())
 	fmt.Println("SES:")
 	diff.PrintSes()
 }

@@ -89,7 +89,12 @@ func (diff *Diff) Editdistance() int {
 }
 
 // Lcs returns LCS (Longest Common Subsequence) between a and b
-func (diff *Diff) Lcs() string {
+func (diff *Diff) Lcs() []rune {
+	return diff.lcs
+}
+
+// Lcs returns LCS (Longest Common Subsequence) string between a and b
+func (diff *Diff) LcsString() string {
 	return string(diff.lcs)
 }
 
