@@ -189,3 +189,10 @@ func TestDiffOnlyEditdistance(t *testing.T) {
 	assert(t, lcs == "")
 	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
+
+func TestDiffSprintSes(t *testing.T) {
+	diff := New("a\nb\nc", "a\n1\nc")
+	diff.Compose()
+	ses := diff.SprintSes()
+	assert(t, ses == "  a\n  \n\n- b\n+ 1\n  \n\n  c\n")
+}
