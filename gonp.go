@@ -6,6 +6,7 @@ package gonp
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"unicode/utf8"
 )
 
@@ -106,18 +107,23 @@ func (diff *Diff) PrintSes() {
 
 // SprintSes returns string about shortest edit script between a and b
 func (diff *Diff) SprintSes() string {
-	buf := bytes.NewBufferString("")
+	var buf bytes.Buffer
+	diff.FprintSes(&buf)
+	return buf.String()
+}
+
+// FprintSes emit about shortest edit script between a and b to w
+func (diff *Diff) FprintSes(w io.Writer) {
 	for _, e := range diff.ses {
 		switch e.t {
 		case SesDelete:
-			fmt.Fprintf(buf, "- %c\n", e.e)
+			fmt.Fprintf(w, "- %c\n", e.e)
 		case SesAdd:
-			fmt.Fprintf(buf, "+ %c\n", e.e)
+			fmt.Fprintf(w, "+ %c\n", e.e)
 		case SesCommon:
-			fmt.Fprintf(buf, "  %c\n", e.e)
+			fmt.Fprintf(w, "  %c\n", e.e)
 		}
 	}
-	return buf.String()
 }
 
 // Compose composes diff between a and b
