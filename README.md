@@ -1,7 +1,5 @@
 # gonp
 
-[![Build Status](https://travis-ci.org/cubicdaiya/gonp.png?branch=master)](https://travis-ci.org/cubicdaiya/gonp)
-
 gonp is a diff algorithm implementation in Go.
 
 # Algorithm
