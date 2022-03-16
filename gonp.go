@@ -124,17 +124,17 @@ func (diff *Diff[T]) FprintSes(w io.Writer) {
 	}
 }
 
-// PrintSesString prints shortest edit script string between a and b
-func (diff *Diff[T]) PrintSesString() {
+// PrintSesRune prints shortest edit script rune between a and b
+func (diff *Diff[T]) PrintSesRune() {
 	var buf bytes.Buffer
 	for _, e := range diff.ses {
 		switch e.t {
 		case SesDelete:
-			fmt.Fprintf(&buf, "- %v\n", string(e.e))
+			fmt.Fprintf(&buf, "- %c\n", e.e)
 		case SesAdd:
-			fmt.Fprintf(&buf, "+ %v\n", string(e.e))
+			fmt.Fprintf(&buf, "+ %c\n", e.e)
 		case SesCommon:
-			fmt.Fprintf(&buf, "  %v\n", string(e.e))
+			fmt.Fprintf(&buf, "  %c\n", e.e)
 		}
 	}
 	fmt.Print(buf.String())

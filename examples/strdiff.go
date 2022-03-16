@@ -19,5 +19,5 @@ func main() {
 	fmt.Printf("Editdistance: %d\n", diff.Editdistance())
 	fmt.Printf("LCS: %s\n", string(diff.Lcs()))
 	fmt.Println("SES:")
-	diff.PrintSesString()
+	diff.PrintSesRune()
 }

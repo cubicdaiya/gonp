@@ -12,7 +12,7 @@ fmt:
 	go fmt ./...
 
 check:
-	go test -v ./...
+	go test -v .
 
 clean:
 	rm -f strdiff intdiff

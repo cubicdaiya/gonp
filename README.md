@@ -13,18 +13,37 @@ The computational complexity of Wu's O(NP) Algorithm is averagely O(N+PD), in th
 
 # Getting started
 
+## strdiff
+
 ```go
-diff := gonp.New("abc", "abd")
+diff := gonp.New[rune]([]rune("abc"), []rune("abd"))
 diff.Compose()
 ed := diff.Editdistance() // ed is 2
 lcs := diff.Lcs() // lcs is "ab"
 
 ses := diff.Ses()
 // ses is []SesElem{
-//        {c: 'a', t: Common},
-//        {c: 'b', t: Common},
-//        {c: 'c', t: Delete},
-//        {c: 'd', t: Add},
+//        {e: 'a', t: Common},
+//        {e: 'b', t: Common},
+//        {e: 'c', t: Delete},
+//        {e: 'd', t: Add},
+//        }
+```
+
+## intdiff
+
+```go
+diff := gonp.New[int]([]int{1,2,3}, []int{1,5,3})
+diff.Compose()
+ed := diff.Editdistance() // ed is 2
+lcs := diff.Lcs() // lcs is [1,3]
+
+ses := diff.Ses()
+// ses is []SesElem{
+//        {e: 1, t: Common},
+//        {e: 2, t: Delete},
+//        {e: 5, t: Add},
+//        {e: 3, t: Common},
 //        }
 ```
 
