@@ -10,7 +10,7 @@ func equalsSesElemArray[T Elem](ses1, ses2 []SesElem[T]) bool {
 		return true
 	}
 	for i := 0; i < m; i++ {
-		if ses1[i].e != ses2[i].e || ses1[i].t != ses2[i].t {
+		if ses1[i] != ses2[i] {
 			return false
 		}
 	}
