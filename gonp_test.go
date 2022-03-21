@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func equalsSesElemArray(ses1, ses2 []SesElem) bool {
+func equalsSesElemArray[T Elem](ses1, ses2 []SesElem[T]) bool {
 	m, n := len(ses1), len(ses2)
 	if m != n {
 		return true
@@ -24,11 +24,13 @@ func assert(t *testing.T, b bool) {
 }
 
 func TestDiff1(t *testing.T) {
-	diff := New("abc", "abd")
+	a := []rune("abc")
+	b := []rune("abd")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: 'a', t: SesCommon},
 		{e: 'b', t: SesCommon},
 		{e: 'c', t: SesDelete},
@@ -40,11 +42,13 @@ func TestDiff1(t *testing.T) {
 }
 
 func TestDiff2(t *testing.T) {
-	diff := New("abcdef", "dacfea")
+	a := []rune("abcdef")
+	b := []rune("dacfea")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: 'd', t: SesAdd},
 		{e: 'a', t: SesCommon},
 		{e: 'b', t: SesDelete},
@@ -61,11 +65,13 @@ func TestDiff2(t *testing.T) {
 }
 
 func TestDiff3(t *testing.T) {
-	diff := New("acbdeacbed", "acebdabbabed")
+	a := []rune("acbdeacbed")
+	b := []rune("acebdabbabed")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: 'a', t: SesCommon},
 		{e: 'c', t: SesCommon},
 		{e: 'e', t: SesAdd},
@@ -87,11 +93,13 @@ func TestDiff3(t *testing.T) {
 }
 
 func TestDiff4(t *testing.T) {
-	diff := New("abcbda", "bdcaba")
+	a := []rune("abcbda")
+	b := []rune("bdcaba")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: 'a', t: SesDelete},
 		{e: 'b', t: SesCommon},
 		{e: 'd', t: SesAdd},
@@ -107,11 +115,13 @@ func TestDiff4(t *testing.T) {
 }
 
 func TestDiff5(t *testing.T) {
-	diff := New("bokko", "bokkko")
+	a := []rune("bokko")
+	b := []rune("bokkko")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: 'b', t: SesCommon},
 		{e: 'o', t: SesCommon},
 		{e: 'k', t: SesCommon},
@@ -125,22 +135,26 @@ func TestDiff5(t *testing.T) {
 }
 
 func TestDiffEmptyString1(t *testing.T) {
-	diff := New("", "")
+	a := []rune("")
+	b := []rune("")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{}
+	sesExpected := []SesElem[rune]{}
 	assert(t, diff.Editdistance() == 0)
 	assert(t, lcs == "")
 	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiffEmptyString2(t *testing.T) {
-	diff := New("a", "")
+	a := []rune("a")
+	b := []rune("")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: 'a', t: SesDelete},
 	}
 	assert(t, diff.Editdistance() == 1)
@@ -149,11 +163,13 @@ func TestDiffEmptyString2(t *testing.T) {
 }
 
 func TestDiffEmptyString3(t *testing.T) {
-	diff := New("", "b")
+	a := []rune("")
+	b := []rune("b")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: 'b', t: SesAdd},
 	}
 	assert(t, diff.Editdistance() == 1)
@@ -162,11 +178,13 @@ func TestDiffEmptyString3(t *testing.T) {
 }
 
 func TestDiffMultiByteString(t *testing.T) {
-	diff := New("久保竜彦", "久保達彦")
+	a := []rune("久保竜彦")
+	b := []rune("久保達彦")
+	diff := New[rune](a, b)
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{
+	sesExpected := []SesElem[rune]{
 		{e: '久', t: SesCommon},
 		{e: '保', t: SesCommon},
 		{e: '竜', t: SesDelete},
@@ -179,20 +197,31 @@ func TestDiffMultiByteString(t *testing.T) {
 }
 
 func TestDiffOnlyEditdistance(t *testing.T) {
-	diff := New("abc", "abd")
+	a := []rune("abc")
+	b := []rune("abd")
+	diff := New[rune](a, b)
 	diff.OnlyEd()
 	diff.Compose()
-	lcs := diff.LcsString()
+	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
-	sesExpected := []SesElem{}
+	sesExpected := []SesElem[rune]{}
 	assert(t, diff.Editdistance() == 2)
 	assert(t, lcs == "")
 	assert(t, equalsSesElemArray(sesActual, sesExpected))
 }
 
 func TestDiffSprintSes(t *testing.T) {
-	diff := New("a\nb\nc", "a\n1\nc")
+	a := []rune("a\nb\nc")
+	b := []rune("a\n1\nc")
+	diff := New[rune](a, b)
 	diff.Compose()
 	ses := diff.SprintSes()
-	assert(t, ses == "  a\n  \n\n- b\n+ 1\n  \n\n  c\n")
+	expected := `  97
+  10
+- 98
++ 49
+  10
+  99
+`
+	assert(t, ses == expected)
 }
