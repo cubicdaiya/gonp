@@ -26,7 +26,7 @@ func assert(t *testing.T, b bool) {
 func TestDiff1(t *testing.T) {
 	a := []rune("abc")
 	b := []rune("abd")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -44,7 +44,7 @@ func TestDiff1(t *testing.T) {
 func TestDiff2(t *testing.T) {
 	a := []rune("abcdef")
 	b := []rune("dacfea")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -67,7 +67,7 @@ func TestDiff2(t *testing.T) {
 func TestDiff3(t *testing.T) {
 	a := []rune("acbdeacbed")
 	b := []rune("acebdabbabed")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -95,7 +95,7 @@ func TestDiff3(t *testing.T) {
 func TestDiff4(t *testing.T) {
 	a := []rune("abcbda")
 	b := []rune("bdcaba")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -117,7 +117,7 @@ func TestDiff4(t *testing.T) {
 func TestDiff5(t *testing.T) {
 	a := []rune("bokko")
 	b := []rune("bokkko")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -137,7 +137,7 @@ func TestDiff5(t *testing.T) {
 func TestDiffEmptyString1(t *testing.T) {
 	a := []rune("")
 	b := []rune("")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -150,7 +150,7 @@ func TestDiffEmptyString1(t *testing.T) {
 func TestDiffEmptyString2(t *testing.T) {
 	a := []rune("a")
 	b := []rune("")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -165,7 +165,7 @@ func TestDiffEmptyString2(t *testing.T) {
 func TestDiffEmptyString3(t *testing.T) {
 	a := []rune("")
 	b := []rune("b")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -180,7 +180,7 @@ func TestDiffEmptyString3(t *testing.T) {
 func TestDiffMultiByteString(t *testing.T) {
 	a := []rune("久保竜彦")
 	b := []rune("久保達彦")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
@@ -199,7 +199,7 @@ func TestDiffMultiByteString(t *testing.T) {
 func TestDiffOnlyEditdistance(t *testing.T) {
 	a := []rune("abc")
 	b := []rune("abd")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.OnlyEd()
 	diff.Compose()
 	lcs := string(diff.Lcs())
@@ -213,7 +213,7 @@ func TestDiffOnlyEditdistance(t *testing.T) {
 func TestDiffSprintSes(t *testing.T) {
 	a := []rune("a\nb\nc")
 	b := []rune("a\n1\nc")
-	diff := New[rune](a, b)
+	diff := New(a, b)
 	diff.Compose()
 	ses := diff.SprintSes()
 	expected := `  97
