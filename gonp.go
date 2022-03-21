@@ -32,7 +32,8 @@ type PointWithRoute struct {
 }
 
 type Elem interface {
-	~rune | ~int
+	// int32 overlaps rune
+	~rune | ~string | ~byte | ~int | ~int8 | ~int16 | ~int64 | ~float32 | ~float64
 }
 
 // SesElem is element of SES
@@ -122,22 +123,6 @@ func (diff *Diff[T]) FprintSes(w io.Writer) {
 			fmt.Fprintf(w, "  %v\n", e.e)
 		}
 	}
-}
-
-// PrintSesRune prints shortest edit script rune between a and b
-func (diff *Diff[T]) PrintSesRune() {
-	var buf bytes.Buffer
-	for _, e := range diff.ses {
-		switch e.t {
-		case SesDelete:
-			fmt.Fprintf(&buf, "- %c\n", e.e)
-		case SesAdd:
-			fmt.Fprintf(&buf, "+ %c\n", e.e)
-		case SesCommon:
-			fmt.Fprintf(&buf, "  %c\n", e.e)
-		}
-	}
-	fmt.Print(buf.String())
 }
 
 // Compose composes diff between a and b
@@ -239,4 +224,14 @@ func (diff *Diff[T]) recordSeq(epc []Point) {
 			}
 		}
 	}
+}
+
+// GetElem is getter of element of SES
+func (e *SesElem[T]) GetElem() T {
+	return e.e
+}
+
+// GetType is getter of manipulation type of SES
+func (e *SesElem[T]) GetType() SesType {
+	return e.t
 }

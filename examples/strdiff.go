@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -19,5 +20,19 @@ func main() {
 	fmt.Printf("Editdistance: %d\n", diff.Editdistance())
 	fmt.Printf("LCS: %s\n", string(diff.Lcs()))
 	fmt.Println("SES:")
-	diff.PrintSesRune()
+
+	var buf bytes.Buffer
+	ses := diff.Ses()
+	for _, e := range ses {
+		ee := e.GetElem()
+		switch e.GetType() {
+		case gonp.SesDelete:
+			fmt.Fprintf(&buf, "- %c\n", ee)
+		case gonp.SesAdd:
+			fmt.Fprintf(&buf, "+ %c\n", ee)
+		case gonp.SesCommon:
+			fmt.Fprintf(&buf, "  %c\n", ee)
+		}
+	}
+	fmt.Print(buf.String())
 }
