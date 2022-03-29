@@ -125,11 +125,11 @@ func (diff *Diff[T]) FprintSes(w io.Writer) {
 	for _, e := range diff.ses {
 		switch e.t {
 		case SesDelete:
-			fmt.Fprintf(w, "- %v\n", e.e)
+			fmt.Fprintf(w, "-%v\n", e.e)
 		case SesAdd:
-			fmt.Fprintf(w, "+ %v\n", e.e)
+			fmt.Fprintf(w, "+%v\n", e.e)
 		case SesCommon:
-			fmt.Fprintf(w, "  %v\n", e.e)
+			fmt.Fprintf(w, " %v\n", e.e)
 		}
 	}
 }

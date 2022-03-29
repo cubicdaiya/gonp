@@ -27,11 +27,11 @@ func main() {
 		ee := e.GetElem()
 		switch e.GetType() {
 		case gonp.SesDelete:
-			fmt.Fprintf(&buf, "- %c\n", ee)
+			fmt.Fprintf(&buf, "-%c\n", ee)
 		case gonp.SesAdd:
-			fmt.Fprintf(&buf, "+ %c\n", ee)
+			fmt.Fprintf(&buf, "+%c\n", ee)
 		case gonp.SesCommon:
-			fmt.Fprintf(&buf, "  %c\n", ee)
+			fmt.Fprintf(&buf, " %c\n", ee)
 		}
 	}
 	fmt.Print(buf.String())
