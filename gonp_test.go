@@ -384,10 +384,10 @@ func TestDiffSprintSes(t *testing.T) {
 	diff := New(a, b)
 	diff.Compose()
 	actual := diff.SprintSes()
-	expected := `  a
-- b
-+ 1
-  c
+	expected := ` a
+-b
++1
+ c
 `
 	assert(t, actual == expected, fmt.Sprintf("want: %v, actual: %v", expected, actual))
 }
