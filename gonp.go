@@ -38,8 +38,10 @@ type Elem interface {
 
 // SesElem is element of SES
 type SesElem[T Elem] struct {
-	e T
-	t SesType
+	e    T
+	t    SesType
+	aIdx int
+	bIdx int
 }
 
 // Diff is context for calculating difference between a and b
@@ -53,6 +55,7 @@ type Diff[T Elem] struct {
 	path           []int
 	onlyEd         bool
 	pointWithRoute []PointWithRoute
+	contextSize    int
 }
 
 func max(x, y int) int {
@@ -76,12 +79,18 @@ func New[T Elem](a, b []T) *Diff[T] {
 	diff.m, diff.n = m, n
 	diff.reverse = reverse
 	diff.onlyEd = false
+	diff.contextSize = DefaultContextSize
 	return diff
 }
 
 // OnlyEd enables to calculate only edit distance
 func (diff *Diff[T]) OnlyEd() {
 	diff.onlyEd = true
+}
+
+// SetContextSize sets the context size of unified format difference
+func (diff *Diff[T]) SetContextSize(n int) {
+	diff.contextSize = n
 }
 
 // Editdistance returns edit distance between a and b
@@ -199,24 +208,30 @@ func (diff *Diff[T]) recordSeq(epc []Point) {
 	for i := len(epc) - 1; i >= 0; i-- {
 		for (px < epc[i].x) || (py < epc[i].y) {
 			if (epc[i].y - epc[i].x) > (py - px) {
-				t := SesAdd
 				if diff.reverse {
-					t = SesDelete
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesDelete, aIdx: y, bIdx: 0})
+				} else {
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesAdd, aIdx: 0, bIdx: y})
 				}
-				diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: t})
 				y++
 				py++
 			} else if epc[i].y-epc[i].x < py-px {
-				t := SesDelete
 				if diff.reverse {
-					t = SesAdd
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesAdd, aIdx: 0, bIdx: x})
+				} else {
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesDelete, aIdx: x, bIdx: 0})
+
 				}
-				diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: t})
 				x++
 				px++
 			} else {
-				diff.lcs = append(diff.lcs, diff.a[px])
-				diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesCommon})
+				if diff.reverse {
+					diff.lcs = append(diff.lcs, diff.b[py])
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesCommon, aIdx: y, bIdx: x})
+				} else {
+					diff.lcs = append(diff.lcs, diff.a[px])
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesCommon, aIdx: x, bIdx: y})
+				}
 				x++
 				y++
 				px++
