@@ -60,4 +60,27 @@ SES:
   b
 - c
 + d
+$ make intdiff
+go build -o intdiff examples/intdiff.go
+$ ./intdiff
+Editdistance: 2
+LCS: [1 2 4 5]
+SES:
+  1
+  2
+- 3
++ 9
+  4
+  5
+$ make unistrdiff
+go build -o unistrdiff examples/unistrdiff.go
+$ ./unistrdiff abc abd
+Editdistance:2
+LCS:ab
+Unified format difference:
+@@ -1,3 +1,3 @@
+ a
+ b
+-c
++d
 ```
