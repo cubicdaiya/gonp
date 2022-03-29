@@ -58,15 +58,6 @@ func (diff *Diff[T]) FprintUniHunks(w io.Writer, uniHunks []UniHunk[T]) {
 	}
 }
 
-func (diff *Diff[T]) shiftCommons(commons []SesElem[T], b, d int) ([]SesElem[T], int, int) {
-	if len(commons) > diff.contextSize {
-		commons = commons[1:]
-		b -= 1
-		d -= 1
-	}
-	return commons, b, d
-}
-
 // Compose composes unified format difference between a and b
 func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 	if diff.ed == 0 {
@@ -146,4 +137,13 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 	}
 
 	return uniHunks
+}
+
+func (diff *Diff[T]) shiftCommons(commons []SesElem[T], b, d int) ([]SesElem[T], int, int) {
+	if len(commons) > diff.contextSize {
+		commons = commons[1:]
+		b -= 1
+		d -= 1
+	}
+	return commons, b, d
 }
