@@ -31,6 +31,7 @@ type PointWithRoute struct {
 	x, y, r int
 }
 
+// Type constraints for element in SES
 type Elem interface {
 	// int32 overlaps rune
 	~rune | ~string | ~byte | ~int | ~int8 | ~int16 | ~int64 | ~float32 | ~float64

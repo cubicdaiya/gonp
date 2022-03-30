@@ -21,10 +21,12 @@ type UniHunk[T Elem] struct {
 	changes    []SesElem[T]
 }
 
+// GetChanges is getter of changes in UniHunk
 func (uniHunk *UniHunk[T]) GetChanges() []SesElem[T] {
 	return uniHunk.changes
 }
 
+// SprintDiffRange returns formatted string represents difference range
 func (uniHunk *UniHunk[T]) SprintDiffRange() string {
 	return fmt.Sprintf("@@ -%d,%d +%d,%d @@\n", uniHunk.a, uniHunk.b, uniHunk.c, uniHunk.d)
 }
