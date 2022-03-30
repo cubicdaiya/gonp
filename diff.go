@@ -58,13 +58,6 @@ type Diff[T Elem] struct {
 	contextSize    int
 }
 
-func max(x, y int) int {
-	if x < y {
-		return y
-	}
-	return x
-}
-
 // New is initializer of Diff
 func New[T Elem](a, b []T) *Diff[T] {
 	diff := new(Diff[T])
@@ -249,4 +242,11 @@ func (e *SesElem[T]) GetElem() T {
 // GetType is getter of manipulation type of SES
 func (e *SesElem[T]) GetType() SesType {
 	return e.t
+}
+
+func max(x, y int) int {
+	if x < y {
+		return y
+	}
+	return x
 }
