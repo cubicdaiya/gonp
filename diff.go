@@ -18,6 +18,11 @@ const (
 	SesAdd
 )
 
+const (
+	// limit of cordinate size
+	DefaultRouteSize = 2000000
+)
+
 // SesType is manipulaton type
 type SesType int
 
@@ -57,6 +62,7 @@ type Diff[T Elem] struct {
 	onlyEd         bool
 	pointWithRoute []PointWithRoute
 	contextSize    int
+	routeSize      int
 }
 
 // New is initializer of Diff
@@ -74,6 +80,7 @@ func New[T Elem](a, b []T) *Diff[T] {
 	diff.reverse = reverse
 	diff.onlyEd = false
 	diff.contextSize = DefaultContextSize
+	diff.routeSize = DefaultRouteSize
 	return diff
 }
 
@@ -85,6 +92,11 @@ func (diff *Diff[T]) OnlyEd() {
 // SetContextSize sets the context size of unified format difference
 func (diff *Diff[T]) SetContextSize(n int) {
 	diff.contextSize = n
+}
+
+// SetRouteSize sets the context size of unified format difference
+func (diff *Diff[T]) SetRouteSize(n int) {
+	diff.routeSize = n
 }
 
 // Editdistance returns edit distance between a and b
@@ -130,6 +142,7 @@ func (diff *Diff[T]) FprintSes(w io.Writer) {
 
 // Compose composes diff between a and b
 func (diff *Diff[T]) Compose() {
+ONP:
 	fp := make([]int, diff.m+diff.n+3)
 	diff.path = make([]int, diff.m+diff.n+3)
 	diff.pointWithRoute = make([]PointWithRoute, 0)
@@ -153,7 +166,7 @@ func (diff *Diff[T]) Compose() {
 
 		fp[delta+offset] = diff.snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset], offset)
 
-		if fp[delta+offset] >= diff.n {
+		if fp[delta+offset] >= diff.n || len(diff.pointWithRoute) > diff.routeSize {
 			diff.ed = delta + 2*p
 			break
 		}
@@ -169,7 +182,10 @@ func (diff *Diff[T]) Compose() {
 		epc = append(epc, Point{x: diff.pointWithRoute[r].x, y: diff.pointWithRoute[r].y})
 		r = diff.pointWithRoute[r].r
 	}
-	diff.recordSeq(epc)
+
+	if !diff.recordSeq(epc) {
+		goto ONP
+	}
 }
 
 func (diff *Diff[T]) snake(k, p, pp, offset int) int {
@@ -196,7 +212,7 @@ func (diff *Diff[T]) snake(k, p, pp, offset int) int {
 	return y
 }
 
-func (diff *Diff[T]) recordSeq(epc []Point) {
+func (diff *Diff[T]) recordSeq(epc []Point) bool {
 	x, y := 1, 1
 	px, py := 0, 0
 	for i := len(epc) - 1; i >= 0; i-- {
@@ -233,6 +249,27 @@ func (diff *Diff[T]) recordSeq(epc []Point) {
 			}
 		}
 	}
+
+	if x > diff.m && y > diff.n {
+		// all recording succeeded
+	} else {
+		a := diff.a[x-1:]
+		b := diff.b[y-1:]
+		m := len(a)
+		n := len(b)
+		reverse := false
+		if m >= n {
+			a, b = b, a
+			m, n = n, m
+			reverse = true
+		}
+		diff.a, diff.b = a, b
+		diff.m, diff.n = m, n
+		diff.reverse = reverse
+		return false
+	}
+
+	return true
 }
 
 // GetElem is getter of element of SES
