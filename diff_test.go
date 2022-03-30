@@ -259,6 +259,38 @@ func TestDiff6(t *testing.T) {
 	}
 }
 
+func TestPluralDiff(t *testing.T) {
+	a := []rune("abc")
+	b := []rune("abd")
+	diff := New(a, b)
+	diff.SetRouteSize(1)
+	diff.Compose()
+	lcs := string(diff.Lcs())
+	sesActual := diff.Ses()
+	sesExpected := []SesElem[rune]{
+		{e: 'a', t: SesCommon, aIdx: 1, bIdx: 1},
+		{e: 'b', t: SesCommon, aIdx: 2, bIdx: 2},
+		{e: 'c', t: SesDelete, aIdx: 3, bIdx: 0},
+		{e: 'd', t: SesAdd, aIdx: 0, bIdx: 3},
+	}
+	assert(t, diff.Editdistance() == 2, fmt.Sprintf("want: 2, actual: %d", diff.Editdistance()))
+	assert(t, lcs == "ab", fmt.Sprintf("want: ab, actual: %s", lcs))
+	assert(t, equalsSesElemArray(sesActual, sesExpected), fmt.Sprintf("want: %v, actual: %v", sesExpected, sesActual))
+
+	uniHunksActual := diff.UnifiedHunks()
+	uniHunksExpected := []UniHunk[rune]{
+		{a: 1, b: 3, c: 1, d: 3, changes: sesExpected},
+	}
+	assert(t, len(uniHunksActual) == len(uniHunksExpected), fmt.Sprintf("want: 1, actual: %d", len(uniHunksActual)))
+	for i := 0; i < len(uniHunksActual); i++ {
+		assert(t, uniHunksActual[i].a == uniHunksExpected[i].a, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].a))
+		assert(t, uniHunksActual[i].b == uniHunksExpected[i].b, fmt.Sprintf("want: 3, actual: %d", uniHunksActual[i].b))
+		assert(t, uniHunksActual[i].c == uniHunksExpected[i].c, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].c))
+		assert(t, uniHunksActual[i].d == uniHunksExpected[i].d, fmt.Sprintf("want: 3, actual: %d", uniHunksActual[i].d))
+		assert(t, equalsSesElemArray(uniHunksActual[i].changes, uniHunksExpected[i].changes), fmt.Sprintf("want: %v, actual: %v", uniHunksExpected, uniHunksActual))
+	}
+}
+
 func TestDiffEmptyString1(t *testing.T) {
 	a := []rune("")
 	b := []rune("")
