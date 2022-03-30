@@ -1,9 +1,10 @@
 all: *.go examples/*.go
-	go build -o strdiff examples/strdiff.go
-	go build -o intdiff examples/intdiff.go
-	go build -o unistrdiff examples/unistrdiff.go
-	go build -o uniintdiff examples/uniintdiff.go
-	go build -o strpatch examples/strpatch.go
+	go build -o strdiff     examples/strdiff.go
+	go build -o intdiff     examples/intdiff.go
+	go build -o unistrdiff  examples/unistrdiff.go
+	go build -o uniintdiff  examples/uniintdiff.go
+	go build -o unifilediff examples/unifilediff.go
+	go build -o strpatch    examples/strpatch.go
 
 strdiff: *.go
 	go build -o $@ examples/strdiff.go
@@ -17,6 +18,9 @@ unistrdiff: *.go
 uniintdiff: *.go
 	go build -o $@ examples/uniintdiff.go
 
+unifilediff: *.go
+	go build -o $@ examples/unidiff.go
+
 strpatch: *.go
 	go build -o $@ examples/strpatch.go
 
@@ -27,6 +31,6 @@ check:
 	go test -v .
 
 clean:
-	rm -f strdiff intdiff unistrdiff uniintdiff strpatch
+	rm -f strdiff intdiff unistrdiff uniintdiff unifilediff strpatch
 
 .PHONY: all
