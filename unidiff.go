@@ -95,7 +95,11 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 			switch phase {
 			case PhaseFrontDiff:
 				changes = append(changes, e)
-				changes, b, d = diff.shiftCommons(changes, b, d)
+				if len(changes) > diff.contextSize {
+					changes = changes[1:]
+					b -= 1
+					d -= 1
+				}
 			case PhaseInDiff:
 				changes = append(changes, e)
 				cc += 1
@@ -139,13 +143,4 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 	}
 
 	return uniHunks
-}
-
-func (diff *Diff[T]) shiftCommons(commons []SesElem[T], b, d int) ([]SesElem[T], int, int) {
-	if len(commons) > diff.contextSize {
-		commons = commons[1:]
-		b -= 1
-		d -= 1
-	}
-	return commons, b, d
 }
