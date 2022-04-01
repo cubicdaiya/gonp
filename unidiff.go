@@ -128,10 +128,7 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 				c = changes[0].bIdx
 			}
 			uniHunk := UniHunk[T]{
-				a:       a,
-				b:       b,
-				c:       c,
-				d:       d,
+				a: a, b: b, c: c, d: d,
 				changes: changes,
 			}
 			uniHunks = append(uniHunks, uniHunk)
