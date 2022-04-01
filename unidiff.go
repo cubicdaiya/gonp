@@ -132,6 +132,8 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 				changes: changes,
 			}
 			uniHunks = append(uniHunks, uniHunk)
+
+			// re-init states
 			cc = 0
 			b, d = 0, 0
 			changes = make([]SesElem[T], 0)
