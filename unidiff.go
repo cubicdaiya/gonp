@@ -60,7 +60,7 @@ func (diff *Diff[T]) FprintUniHunks(w io.Writer, uniHunks []UniHunk[T]) {
 	}
 }
 
-// Compose composes unified format difference between a and b
+// UnifiedHunks composes unified format difference between a and b
 func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 	if diff.ed == 0 {
 		return []UniHunk[T]{}
