@@ -75,6 +75,7 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 	for i, e := range diff.ses {
 		switch e.t {
 		case SesDelete:
+			b += 1
 			fallthrough
 		case SesAdd:
 			switch phase {
@@ -87,9 +88,7 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 			case PhaseBehindDiff:
 				// do nothing
 			}
-			if e.t == SesDelete {
-				b += 1
-			} else {
+			if e.t == SesAdd {
 				d += 1
 			}
 		case SesCommon:
