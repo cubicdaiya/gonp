@@ -16,6 +16,7 @@ const (
 	DefaultContextSize = 3
 )
 
+// UniHunk is an element of unified format difference
 type UniHunk[T Elem] struct {
 	a, b, c, d int // @@ -a,b +c,d @@
 	changes    []SesElem[T]
