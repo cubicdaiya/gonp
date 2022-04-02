@@ -99,6 +99,16 @@ func (diff *Diff[T]) SetRouteSize(n int) {
 	diff.routeSize = n
 }
 
+// GetElem is getter of element of SES
+func (e *SesElem[T]) GetElem() T {
+	return e.e
+}
+
+// GetType is getter of manipulation type of SES
+func (e *SesElem[T]) GetType() SesType {
+	return e.t
+}
+
 // Editdistance returns edit distance between a and b
 func (diff *Diff[T]) Editdistance() int {
 	return diff.ed
@@ -270,16 +280,6 @@ func (diff *Diff[T]) recordSeq(epc []Point) bool {
 	}
 
 	return true
-}
-
-// GetElem is getter of element of SES
-func (e *SesElem[T]) GetElem() T {
-	return e.e
-}
-
-// GetType is getter of manipulation type of SES
-func (e *SesElem[T]) GetType() SesType {
-	return e.t
 }
 
 func max(x, y int) int {
