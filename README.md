@@ -66,6 +66,8 @@ diff.PrintUniHunks(uniHunks)
 
 # Example
 
+## strdiff
+
 ```
 $ make strdiff
 go build -o strdiff examples/strdiff.go
@@ -77,6 +79,11 @@ SES:
   b
 - c
 + d
+```
+
+## intdiff
+
+```
 $ make intdiff
 go build -o intdiff examples/intdiff.go
 $ ./intdiff
@@ -89,12 +96,56 @@ SES:
 + 9
   4
   5
+```
+
+## unistrdiff
+
+```
 $ make unistrdiff
 go build -o unistrdiff examples/unistrdiff.go
 $ ./unistrdiff abc abd
 Editdistance:2
 LCS:ab
 Unified format difference:
+@@ -1,3 +1,3 @@
+ a
+ b
+-c
++d
+```
+
+## uniintdiff
+
+```
+$ make uniintdiff
+go build -o uniintdiff examples/uniintdiff.go
+$ ./uniintdiff
+Editdistance: 2
+LCS: [1 2 4 5]
+Unified format difference:
+@@ -1,5 +1,5 @@
+ 1
+ 2
+-3
++9
+ 4
+ 5
+```
+
+## unifilediff
+
+```
+$ make unifilediff
+go build -o unifilediff examples/unifilediff.go
+$ cat a.txt
+a
+b
+c
+$ cat b.txt
+a
+b
+d
+$ ./unifilediff a.txt b.txt
 @@ -1,3 +1,3 @@
  a
  b
