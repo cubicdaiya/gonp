@@ -39,12 +39,12 @@ func main() {
 
 	a, err = getLines(f1)
 	if err != nil {
-		log.Fatalf("%s does not exist.", f1)
+		log.Fatalf("%s: %s", f1, err)
 	}
 
 	b, err = getLines(f2)
 	if err != nil {
-		log.Fatalf("%s does not exist.", f2)
+		log.Fatalf("%s: %s", f2, err)
 	}
 
 	diff := gonp.New(a, b)
