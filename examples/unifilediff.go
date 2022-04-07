@@ -25,7 +25,7 @@ func getLines(f string) ([]string, error) {
 
 func main() {
 	if len(os.Args) < 3 {
-		log.Fatal("./unifilediff filename11 filename2")
+		log.Fatal("./unifilediff filename1 filename2")
 	}
 
 	f1 := os.Args[1]
