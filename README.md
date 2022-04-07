@@ -1,3 +1,5 @@
+![workflow status](https://github.com/cubicdaiya/gonp/actions/workflows/go.yml/badge.svg)
+
 # gonp
 
 gonp is a diff algorithm implementation in Go.
