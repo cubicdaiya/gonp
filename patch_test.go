@@ -2,6 +2,7 @@ package gonp
 
 import (
 	"testing"
+	"unicode/utf8"
 )
 
 func TestPatch(t *testing.T) {
@@ -78,4 +79,25 @@ func TestPatch(t *testing.T) {
 			t.Errorf("applying unified format difference between '%s' and '%s' to '%s' is %s, but got %s", string(test.a), string(test.b), string(test.a), string(test.b), string(uniPatchedSeq))
 		}
 	}
+}
+
+func FuzzPatch(f *testing.F) {
+	f.Fuzz(func(t *testing.T, a, b string) {
+		if !utf8.ValidString(a) || !utf8.ValidString(b) {
+			return
+		}
+
+		diff := New([]rune(a), []rune(b))
+		diff.Compose()
+
+		patchedSeq := diff.Patch([]rune(a))
+		if string(patchedSeq) != b {
+			t.Errorf("applying SES between '%s' and '%s' to '%s' is %s, but got %s", a, b, a, b, string(patchedSeq))
+		}
+
+		uniPatchedSeq, _ := diff.UniPatch([]rune(a), diff.UnifiedHunks())
+		if string(uniPatchedSeq) != b {
+			t.Errorf("applying unified format difference between '%s' and '%s' to '%s' is %s, but got %s", a, b, a, b, string(uniPatchedSeq))
+		}
+	})
 }
