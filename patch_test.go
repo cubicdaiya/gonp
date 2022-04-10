@@ -11,6 +11,18 @@ func TestPatch(t *testing.T) {
 		b string
 	}{
 		{
+			a: "",
+			b: "",
+		},
+		{
+			a: "abc",
+			b: "",
+		},
+		{
+			a: "def",
+			b: "",
+		},
+		{
 			a: "abc",
 			b: "abd",
 		},
