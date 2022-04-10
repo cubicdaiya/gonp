@@ -263,19 +263,10 @@ func (diff *Diff[T]) recordSeq(epc []Point) bool {
 	if x > diff.m && y > diff.n {
 		// all recording succeeded
 	} else {
-		a := diff.a[x-1:]
-		b := diff.b[y-1:]
-		m := len(a)
-		n := len(b)
-		reverse := false
-		if m >= n {
-			a, b = b, a
-			m, n = n, m
-			reverse = true
-		}
-		diff.a, diff.b = a, b
-		diff.m, diff.n = m, n
-		diff.reverse = reverse
+		diff.a = diff.a[x-1:]
+		diff.b = diff.b[y-1:]
+		diff.m = len(diff.a)
+		diff.n = len(diff.b)
 		return false
 	}
 
