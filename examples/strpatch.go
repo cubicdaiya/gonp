@@ -17,7 +17,7 @@ func main() {
 	diff := gonp.New(a, b)
 	diff.Compose()
 
-	patchedSeq, _ := diff.Patch(a)
+	patchedSeq := diff.Patch(a)
 	fmt.Printf("success:%v, applying SES between '%s' and '%s' to '%s' is '%s'\n",
 		string(b) == string(patchedSeq),
 		string(a), string(b),

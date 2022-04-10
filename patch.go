@@ -6,9 +6,9 @@ import (
 )
 
 // Patch applies SES between a and b to seq
-func (diff *Diff[T]) Patch(seq []T) ([]T, error) {
+func (diff *Diff[T]) Patch(seq []T) []T {
 	if diff.ed == 0 {
-		return []T{}, fmt.Errorf("no difference")
+		return seq
 	}
 
 	l := list.New()
@@ -40,13 +40,13 @@ func (diff *Diff[T]) Patch(seq []T) ([]T, error) {
 		r = append(r, e.Value.(T))
 	}
 
-	return r, nil
+	return r
 }
 
 // UniPatch applies unified format difference between a and b to seq
 func (diff *Diff[T]) UniPatch(seq []T, uniHunks []UniHunk[T]) ([]T, error) {
 	if diff.ed == 0 {
-		return []T{}, fmt.Errorf("no difference")
+		return seq, nil
 	}
 	if len(uniHunks) == 0 {
 		return []T{}, fmt.Errorf("invalid difference")

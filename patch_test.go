@@ -15,12 +15,16 @@ func TestPatch(t *testing.T) {
 			b: "",
 		},
 		{
+			a: "a",
+			b: "a",
+		},
+		{
 			a: "abc",
 			b: "",
 		},
 		{
-			a: "def",
-			b: "",
+			a: "",
+			b: "def",
 		},
 		{
 			a: "abc",
@@ -64,7 +68,7 @@ func TestPatch(t *testing.T) {
 		diff := New([]rune(test.a), []rune(test.b))
 		diff.Compose()
 
-		patchedSeq, _ := diff.Patch([]rune(test.a))
+		patchedSeq := diff.Patch([]rune(test.a))
 		if string(patchedSeq) != test.b {
 			t.Errorf("applying SES between '%s' and '%s' to '%s' is %s, but got %s", string(test.a), string(test.b), string(test.a), string(test.b), string(patchedSeq))
 		}
