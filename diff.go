@@ -54,6 +54,7 @@ type SesElem[T Elem] struct {
 type Diff[T Elem] struct {
 	a, b           []T
 	m, n           int
+	ox, oy         int
 	ed             int
 	lcs            []T
 	ses            []SesElem[T]
@@ -229,17 +230,17 @@ func (diff *Diff[T]) recordSeq(epc []Point) bool {
 		for (px < epc[i].x) || (py < epc[i].y) {
 			if (epc[i].y - epc[i].x) > (py - px) {
 				if diff.reverse {
-					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesDelete, aIdx: y, bIdx: 0})
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesDelete, aIdx: y + diff.oy, bIdx: 0})
 				} else {
-					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesAdd, aIdx: 0, bIdx: y})
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesAdd, aIdx: 0, bIdx: y + diff.oy})
 				}
 				y++
 				py++
 			} else if epc[i].y-epc[i].x < py-px {
 				if diff.reverse {
-					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesAdd, aIdx: 0, bIdx: x})
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesAdd, aIdx: 0, bIdx: x + diff.ox})
 				} else {
-					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesDelete, aIdx: x, bIdx: 0})
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesDelete, aIdx: x + diff.ox, bIdx: 0})
 
 				}
 				x++
@@ -247,10 +248,10 @@ func (diff *Diff[T]) recordSeq(epc []Point) bool {
 			} else {
 				if diff.reverse {
 					diff.lcs = append(diff.lcs, diff.b[py])
-					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesCommon, aIdx: y, bIdx: x})
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.b[py], t: SesCommon, aIdx: y + diff.oy, bIdx: x + diff.ox})
 				} else {
 					diff.lcs = append(diff.lcs, diff.a[px])
-					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesCommon, aIdx: x, bIdx: y})
+					diff.ses = append(diff.ses, SesElem[T]{e: diff.a[px], t: SesCommon, aIdx: x + diff.ox, bIdx: y + diff.oy})
 				}
 				x++
 				y++
@@ -267,6 +268,8 @@ func (diff *Diff[T]) recordSeq(epc []Point) bool {
 		diff.b = diff.b[y-1:]
 		diff.m = len(diff.a)
 		diff.n = len(diff.b)
+		diff.ox = x - 1
+		diff.oy = y - 1
 		return false
 	}
 
