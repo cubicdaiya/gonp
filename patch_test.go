@@ -38,6 +38,14 @@ func TestPatch(t *testing.T) {
 			a: "aaaaaaaaaaaaaaaaadsafabcaaaaaaaaaaaaaaaaaaewaaabdaaaaaabbb",
 			b: "aaaaaaaaaaaaaaadasfdsafsadasdafbdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaesaaabcaaaaaaccc",
 		},
+		{
+			a: "aaaaaaaaaaaaaaaaadsafabcaaaaaaaaaaaaaaaaaaewaaabdaaaaaabbb",
+			b: "aaaaaaaaaaaaaaadasfdsafsadasdafbdaaaaaaaaaaaaaaaaaaaaaaeaaaaaaaaaaesaaabcaaaaaaccc",
+		},
+		{
+			a: "aaaaaaaaaaaaaaadasfdsafsadasdafbdaaaaaaaaaaaaaaaaaaaaaaeaaaaaaaaaaesaaabcaaaaaaccc",
+			b: "aaaaaaaaaaaaaaaaadsafabcaaaaaaaaaaaaaaaaaaewaaabdaaaaaabbb",
+		},
 	}
 
 	for _, test := range tests {

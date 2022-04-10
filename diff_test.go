@@ -324,13 +324,13 @@ func TestDiffEmptyString2(t *testing.T) {
 
 	uniHunksActual := diff.UnifiedHunks()
 	uniHunksExpected := []UniHunk[rune]{
-		{a: 1, b: 1, c: 1, d: 0, changes: sesExpected},
+		{a: 1, b: 1, c: 0, d: 0, changes: sesExpected},
 	}
 	assert(t, len(uniHunksActual) == len(uniHunksExpected), fmt.Sprintf("want: 1, actual: %d", len(uniHunksActual)))
 	for i := 0; i < len(uniHunksActual); i++ {
 		assert(t, uniHunksActual[i].a == uniHunksExpected[i].a, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].a))
 		assert(t, uniHunksActual[i].b == uniHunksExpected[i].b, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].b))
-		assert(t, uniHunksActual[i].c == uniHunksExpected[i].c, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].c))
+		assert(t, uniHunksActual[i].c == uniHunksExpected[i].c, fmt.Sprintf("want: 0, actual: %d", uniHunksActual[i].c))
 		assert(t, uniHunksActual[i].d == uniHunksExpected[i].d, fmt.Sprintf("want: 0, actual: %d", uniHunksActual[i].d))
 		assert(t, equalsSesElemArray(uniHunksActual[i].changes, uniHunksExpected[i].changes), fmt.Sprintf("want: %v, actual: %v", uniHunksExpected, uniHunksActual))
 	}
@@ -352,13 +352,13 @@ func TestDiffEmptyString3(t *testing.T) {
 
 	uniHunksActual := diff.UnifiedHunks()
 	uniHunksExpected := []UniHunk[rune]{
-		{a: 1, b: 0, c: 1, d: 1, changes: sesExpected},
+		{a: 0, b: 0, c: 1, d: 1, changes: sesExpected},
 	}
 	assert(t, len(uniHunksActual) == len(uniHunksExpected), fmt.Sprintf("want: 1, actual: %d", len(uniHunksActual)))
 	for i := 0; i < len(uniHunksActual); i++ {
-		assert(t, uniHunksActual[i].a == uniHunksExpected[i].a, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].a))
+		assert(t, uniHunksActual[i].a == uniHunksExpected[i].a, fmt.Sprintf("want: 0, actual: %d", uniHunksActual[i].a))
 		assert(t, uniHunksActual[i].b == uniHunksExpected[i].b, fmt.Sprintf("want: 0, actual: %d", uniHunksActual[i].b))
-		assert(t, uniHunksActual[i].c == uniHunksExpected[i].c, fmt.Sprintf("want: 0, actual: %d", uniHunksActual[i].c))
+		assert(t, uniHunksActual[i].c == uniHunksExpected[i].c, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].c))
 		assert(t, uniHunksActual[i].d == uniHunksExpected[i].d, fmt.Sprintf("want: 1, actual: %d", uniHunksActual[i].d))
 		assert(t, equalsSesElemArray(uniHunksActual[i].changes, uniHunksExpected[i].changes), fmt.Sprintf("want: %v, actual: %v", uniHunksExpected, uniHunksActual))
 	}

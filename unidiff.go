@@ -114,19 +114,20 @@ func (diff *Diff[T]) UnifiedHunks() []UniHunk[T] {
 		}
 
 		if phase == PhaseBehindDiff || i == len(diff.ses)-1 {
-			a := changes[0].aIdx
-			c := changes[0].bIdx
-			if diff.reverse {
-				a, c = c, a
+			a, c := 0, 0
+			for _, e = range changes {
+				if a == 0 {
+					a = e.aIdx
+				}
+				if c == 0 {
+					c = e.bIdx
+				}
+
+				if a != 0 && c != 0 {
+					break
+				}
 			}
-			switch changes[0].t {
-			case SesDelete:
-				a = changes[0].aIdx
-				c = changes[0].aIdx
-			case SesAdd:
-				a = changes[0].bIdx
-				c = changes[0].bIdx
-			}
+
 			uniHunk := UniHunk[T]{
 				a: a, b: b, c: c, d: d,
 				changes: changes,
