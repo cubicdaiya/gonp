@@ -89,6 +89,7 @@ SES:
 $ make intdiff
 go build -o intdiff examples/intdiff.go
 $ ./intdiff
+diff [1 2 3 4 5] [1 2 9 4 5]
 Editdistance: 2
 LCS: [1 2 4 5]
 SES:
@@ -122,6 +123,7 @@ Unified format difference:
 $ make uniintdiff
 go build -o uniintdiff examples/uniintdiff.go
 $ ./uniintdiff
+diff [1 2 3 4 5] [1 2 9 4 5]
 Editdistance: 2
 LCS: [1 2 4 5]
 Unified format difference:
