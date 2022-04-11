@@ -6,22 +6,22 @@ all: *.go examples/*.go
 	go build -o unifilediff examples/unifilediff.go
 	go build -o strpatch    examples/strpatch.go
 
-strdiff: *.go
+strdiff: *.go examples/strdiff.go
 	go build -o $@ examples/strdiff.go
 
 intdiff: *.go examples/intdiff.go
 	go build -o $@ examples/intdiff.go
 
-unistrdiff: *.go
+unistrdiff: *.go examples/unistrdiff.go
 	go build -o $@ examples/unistrdiff.go
 
-uniintdiff: *.go
+uniintdiff: *.go examples/uniintdiff.go
 	go build -o $@ examples/uniintdiff.go
 
-unifilediff: *.go
+unifilediff: *.go examples/unifilediff.go
 	go build -o $@ examples/unidiff.go
 
-strpatch: *.go
+strpatch: *.go examples/strpatch.go
 	go build -o $@ examples/strpatch.go
 
 fmt:
