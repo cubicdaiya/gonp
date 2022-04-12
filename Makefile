@@ -13,7 +13,7 @@ uniintdiff: *.go examples/uniintdiff.go
 	go build -o $@ examples/uniintdiff.go
 
 unifilediff: *.go examples/unifilediff.go
-	go build -o $@ examples/unidiff.go
+	go build -o $@ examples/unifilediff.go
 
 strpatch: *.go examples/strpatch.go
 	go build -o $@ examples/strpatch.go
