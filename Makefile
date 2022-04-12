@@ -1,10 +1,4 @@
-all: *.go examples/*.go
-	go build -o strdiff     examples/strdiff.go
-	go build -o intdiff     examples/intdiff.go
-	go build -o unistrdiff  examples/unistrdiff.go
-	go build -o uniintdiff  examples/uniintdiff.go
-	go build -o unifilediff examples/unifilediff.go
-	go build -o strpatch    examples/strpatch.go
+all: strdiff intdiff unistrdiff uniintdiff unifilediff strpatch
 
 strdiff: *.go examples/strdiff.go
 	go build -o $@ examples/strdiff.go
