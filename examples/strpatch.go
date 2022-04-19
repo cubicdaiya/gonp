@@ -14,11 +14,11 @@ func main() {
 		log.Fatal("./strdiff arg1 arg2")
 	}
 	if !utf8.ValidString(os.Args[1]) {
-		log.Fatalf("arg1 contains invalid rune")
+		log.Fatal("arg1 contains invalid rune")
 	}
 
 	if !utf8.ValidString(os.Args[2]) {
-		log.Fatalf("arg2 contains invalid rune")
+		log.Fatal("arg2 contains invalid rune")
 	}
 	a := []rune(os.Args[1])
 	b := []rune(os.Args[2])
