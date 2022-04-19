@@ -46,14 +46,8 @@ func buildTargetHeader(f1, f2 string) (TargetHeader, error) {
 	}
 	return TargetHeader{
 		targets: []Target{
-			Target{
-				fname: f1,
-				mtime: fi1.ModTime(),
-			},
-			Target{
-				fname: f2,
-				mtime: fi2.ModTime(),
-			},
+			Target{fname: f1, mtime: fi1.ModTime()},
+			Target{fname: f2, mtime: fi2.ModTime()},
 		},
 	}, nil
 }
