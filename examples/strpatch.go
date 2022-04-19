@@ -31,7 +31,10 @@ func main() {
 		string(a), string(b),
 		string(a), string(patchedSeq))
 
-	uniPatchedSeq, _ := diff.UniPatch(a, diff.UnifiedHunks())
+	uniPatchedSeq, err := diff.UniPatch(a, diff.UnifiedHunks())
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Printf("success:%v, applying unified format difference between '%s' and '%s' to '%s' is '%s'\n",
 		string(b) == string(uniPatchedSeq),
 		string(a), string(b),
