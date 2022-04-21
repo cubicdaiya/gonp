@@ -11,15 +11,18 @@ import (
 	"github.com/cubicdaiya/gonp"
 )
 
+// Target consists of a path and mtime of file.
 type Target struct {
 	fname string
 	mtime time.Time
 }
 
+// TargetHeader has 2 targets based on pathes and mtimes based on 2 files
 type TargetHeader struct {
 	targets []Target
 }
 
+// getLines returns a file contents as string array
 func getLines(f string) ([]string, error) {
 	fp, err := os.Open(f)
 	if err != nil {
@@ -35,6 +38,7 @@ func getLines(f string) ([]string, error) {
 	return lines, nil
 }
 
+// builderTargetHeader returns TargetHeader constructed based on 2 files given as arguments
 func buildTargetHeader(f1, f2 string) (TargetHeader, error) {
 	fi1, err := os.Stat(f1)
 	if err != nil {
@@ -52,6 +56,7 @@ func buildTargetHeader(f1, f2 string) (TargetHeader, error) {
 	}, nil
 }
 
+// String returns a content of TargetHeader as a string
 func (th *TargetHeader) String() string {
 	if len(th.targets) != 2 {
 		return ""
