@@ -78,6 +78,7 @@ func New[T Elem](a, b []T) *Diff[T] {
 	}
 	diff.a, diff.b = a, b
 	diff.m, diff.n = m, n
+	diff.ed = 0
 	diff.reverse = reverse
 	diff.onlyEd = false
 	diff.contextSize = DefaultContextSize
@@ -178,7 +179,7 @@ ONP:
 		fp[delta+offset] = diff.snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset], offset)
 
 		if fp[delta+offset] >= diff.n || len(diff.pointWithRoute) > diff.routeSize {
-			diff.ed = delta + 2*p
+			diff.ed += delta + 2*p
 			break
 		}
 	}

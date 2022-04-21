@@ -410,6 +410,15 @@ func TestDiffOnlyEditdistance(t *testing.T) {
 	assert(t, equalsSesElemArray(sesActual, sesExpected), fmt.Sprintf("want: %v, actual: %v", sesExpected, sesActual))
 }
 
+func TestDiffPluralSubsequence(t *testing.T) {
+	a := []rune("abcaaaaaabd")
+	b := []rune("abdaaaaaabc")
+	diff := New(a, b)
+	diff.SetRouteSize(2) // dividing sequence forcibly
+	diff.Compose()
+	assert(t, diff.Editdistance() == 4, fmt.Sprintf("want: 4, actual: %d", diff.Editdistance()))
+}
+
 func TestDiffSprintSes(t *testing.T) {
 	a := []string{"a", "b", "c"}
 	b := []string{"a", "1", "c"}
