@@ -42,7 +42,7 @@ func equalsUniHunks[T Elem](uniHunks1, uniHunks2 []UniHunk[T]) bool {
 	return true
 }
 
-func TestDiff(t *testing.T) {
+func TestStringDiff(t *testing.T) {
 
 	tests := []struct {
 		name     string
