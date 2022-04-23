@@ -32,7 +32,7 @@ ses := diff.Ses()
 //        }
 ```
 
-## int array difference
+## int slice difference
 
 ```go
 diff := gonp.New([]int{1,2,3}, []int{1,5,3})
