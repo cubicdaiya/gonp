@@ -55,10 +55,10 @@ func TestDiff(t *testing.T) {
 	}{
 		{
 			name: "string diff1",
-			a:   "abc",
-			b:   "abd",
-			ed:  2,
-			lcs: "ab",
+			a:    "abc",
+			b:    "abd",
+			ed:   2,
+			lcs:  "ab",
 			ses: []SesElem[rune]{
 				{e: 'a', t: SesCommon, aIdx: 1, bIdx: 1},
 				{e: 'b', t: SesCommon, aIdx: 2, bIdx: 2},
@@ -78,10 +78,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "string diff2",
-			a:   "abcdef",
-			b:   "dacfea",
-			ed:  6,
-			lcs: "acf",
+			a:    "abcdef",
+			b:    "dacfea",
+			ed:   6,
+			lcs:  "acf",
 			ses: []SesElem[rune]{
 				{e: 'd', t: SesAdd, aIdx: 0, bIdx: 1},
 				{e: 'a', t: SesCommon, aIdx: 1, bIdx: 2},
@@ -111,10 +111,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "string diff3",
-			a:   "acbdeacbed",
-			b:   "acebdabbabed",
-			ed:  6,
-			lcs: "acbdabed",
+			a:    "acbdeacbed",
+			b:    "acebdabbabed",
+			ed:   6,
+			lcs:  "acbdabed",
 			ses: []SesElem[rune]{
 				{e: 'a', t: SesCommon, aIdx: 1, bIdx: 1},
 				{e: 'c', t: SesCommon, aIdx: 2, bIdx: 2},
@@ -154,10 +154,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "string diff4",
-			a:   "abcbda",
-			b:   "bdcaba",
-			ed:  4,
-			lcs: "bcba",
+			a:    "abcbda",
+			b:    "bdcaba",
+			ed:   4,
+			lcs:  "bcba",
 			ses: []SesElem[rune]{
 				{e: 'a', t: SesDelete, aIdx: 1, bIdx: 0},
 				{e: 'b', t: SesCommon, aIdx: 2, bIdx: 1},
@@ -185,10 +185,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "string diff5",
-			a:   "bokko",
-			b:   "bokkko",
-			ed:  1,
-			lcs: "bokko",
+			a:    "bokko",
+			b:    "bokkko",
+			ed:   1,
+			lcs:  "bokko",
 			ses: []SesElem[rune]{
 				{e: 'b', t: SesCommon, aIdx: 1, bIdx: 1},
 				{e: 'o', t: SesCommon, aIdx: 2, bIdx: 2},
@@ -211,10 +211,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "string diff6",
-			a:   "abcaaaaaabd",
-			b:   "abdaaaaaabc",
-			ed:  4,
-			lcs: "abaaaaaab",
+			a:    "abcaaaaaabd",
+			b:    "abdaaaaaabc",
+			ed:   4,
+			lcs:  "abaaaaaab",
 			ses: []SesElem[rune]{
 				{e: 'a', t: SesCommon, aIdx: 1, bIdx: 1},
 				{e: 'b', t: SesCommon, aIdx: 2, bIdx: 2},
@@ -254,7 +254,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
-			name: "empty string diff1",
+			name:     "empty string diff1",
 			a:        "",
 			b:        "",
 			ed:       0,
@@ -264,10 +264,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "empty string diff2",
-			a:   "a",
-			b:   "",
-			ed:  1,
-			lcs: "",
+			a:    "a",
+			b:    "",
+			ed:   1,
+			lcs:  "",
 			ses: []SesElem[rune]{
 				{e: 'a', t: SesDelete, aIdx: 1, bIdx: 0},
 			},
@@ -280,10 +280,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "empty string diff3",
-			a:   "",
-			b:   "b",
-			ed:  1,
-			lcs: "",
+			a:    "",
+			b:    "b",
+			ed:   1,
+			lcs:  "",
 			ses: []SesElem[rune]{
 				{e: 'b', t: SesAdd, aIdx: 0, bIdx: 1},
 			},
@@ -296,10 +296,10 @@ func TestDiff(t *testing.T) {
 		},
 		{
 			name: "multi byte string diff",
-			a:   "久保竜彦",
-			b:   "久保達彦",
-			ed:  2,
-			lcs: "久保彦",
+			a:    "久保竜彦",
+			b:    "久保達彦",
+			ed:   2,
+			lcs:  "久保彦",
 			ses: []SesElem[rune]{
 				{e: '久', t: SesCommon, aIdx: 1, bIdx: 1},
 				{e: '保', t: SesCommon, aIdx: 2, bIdx: 2},
