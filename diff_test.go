@@ -8,7 +8,7 @@ import (
 func equalsSesElemArray[T Elem](ses1, ses2 []SesElem[T]) bool {
 	m, n := len(ses1), len(ses2)
 	if m != n {
-		return true
+		return false
 	}
 	for i := 0; i < m; i++ {
 		if ses1[i] != ses2[i] {
@@ -188,7 +188,7 @@ func TestDiff5(t *testing.T) {
 
 	uniHunksActual := diff.UnifiedHunks()
 	uniHunksExpected := []UniHunk[rune]{
-		{a: 2, b: 4, c: 2, d: 5, changes: sesExpected},
+		{a: 2, b: 4, c: 2, d: 5, changes: sesExpected[1:]},
 	}
 	assert(t, len(uniHunksActual) == len(uniHunksExpected), fmt.Sprintf("want: 1, actual: %d", len(uniHunksActual)))
 	for i := 0; i < len(uniHunksActual); i++ {
