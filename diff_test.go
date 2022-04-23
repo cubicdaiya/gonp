@@ -4,7 +4,20 @@ import (
 	"testing"
 )
 
-func equalsSesElemArray[T Elem](ses1, ses2 []SesElem[T]) bool {
+func equalsSlice[T Elem](slice1, slice2 []T) bool {
+	m, n := len(slice1), len(slice2)
+	if m != n {
+		return false
+	}
+	for i := 0; i < m; i++ {
+		if slice1[i] != slice2[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func equalsSesElemSlice[T Elem](ses1, ses2 []SesElem[T]) bool {
 	m, n := len(ses1), len(ses2)
 	if m != n {
 		return false
@@ -35,7 +48,7 @@ func equalsUniHunks[T Elem](uniHunks1, uniHunks2 []UniHunk[T]) bool {
 		if uniHunks1[i].d != uniHunks2[i].d {
 			return false
 		}
-		if !equalsSesElemArray(uniHunks1[i].changes, uniHunks2[i].changes) {
+		if !equalsSesElemSlice(uniHunks1[i].changes, uniHunks2[i].changes) {
 			return false
 		}
 	}
@@ -333,7 +346,7 @@ func TestStringDiff(t *testing.T) {
 		if tt.lcs != lcs {
 			t.Fatalf(":%s:lcs: want: %s, got: %s", tt.name, tt.lcs, lcs)
 		}
-		if !equalsSesElemArray(tt.ses, ses) {
+		if !equalsSesElemSlice(tt.ses, ses) {
 			t.Fatalf(":%s:ses: want: %v, got: %v", tt.name, tt.ses, ses)
 		}
 
@@ -341,6 +354,75 @@ func TestStringDiff(t *testing.T) {
 			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, tt.uniHunks)
 		}
 	}
+}
+
+func TestSliceDiff(t *testing.T) {
+
+	tests := []struct {
+		name     string
+		a        []int
+		b        []int
+		ed       int
+		lcs      []int
+		ses      []SesElem[int]
+		uniHunks []UniHunk[int]
+	}{
+		{
+			name: "int slice diff",
+			a:    []int{1, 2, 3},
+			b:    []int{1, 5, 3},
+			ed:   2,
+			lcs:  []int{1, 3},
+			ses: []SesElem[int]{
+				{e: 1, t: SesCommon, aIdx: 1, bIdx: 1},
+				{e: 2, t: SesDelete, aIdx: 2, bIdx: 0},
+				{e: 5, t: SesAdd, aIdx: 0, bIdx: 2},
+				{e: 3, t: SesCommon, aIdx: 3, bIdx: 3},
+			},
+			uniHunks: []UniHunk[int]{
+				{a: 1, b: 3, c: 1, d: 3,
+					changes: []SesElem[int]{
+						{e: 1, t: SesCommon, aIdx: 1, bIdx: 1},
+						{e: 2, t: SesDelete, aIdx: 2, bIdx: 0},
+						{e: 5, t: SesAdd, aIdx: 0, bIdx: 2},
+						{e: 3, t: SesCommon, aIdx: 3, bIdx: 3},
+					},
+				},
+			},
+		},
+		{
+			name:     "empty slice diff",
+			a:        []int{},
+			b:        []int{},
+			ed:       0,
+			lcs:      []int{},
+			ses:      []SesElem[int]{},
+			uniHunks: []UniHunk[int]{},
+		},
+	}
+
+	for _, tt := range tests {
+		diff := New(tt.a, tt.b)
+		diff.Compose()
+		ed := diff.Editdistance()
+		lcs := diff.Lcs()
+		ses := diff.Ses()
+		uniHunks := diff.UnifiedHunks()
+		if tt.ed != ed {
+			t.Fatalf(":%s:ed: want: %d, got: %d", tt.name, tt.ed, ed)
+		}
+		if !equalsSlice(tt.lcs, lcs) {
+			t.Fatalf(":%s:lcs: want: %v, got: %v", tt.name, tt.lcs, lcs)
+		}
+		if !equalsSesElemSlice(tt.ses, ses) {
+			t.Fatalf(":%s:ses: want: %v, got: %v", tt.name, tt.ses, ses)
+		}
+
+		if !equalsUniHunks(tt.uniHunks, uniHunks) {
+			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, tt.uniHunks)
+		}
+	}
+
 }
 
 func TestPluralDiff(t *testing.T) {
@@ -366,7 +448,7 @@ func TestPluralDiff(t *testing.T) {
 		t.Fatalf("want: ab, actual: %v", lcs)
 	}
 
-	if !equalsSesElemArray(sesActual, sesExpected) {
+	if !equalsSesElemSlice(sesActual, sesExpected) {
 		t.Fatalf("want: %v, actual: %v", sesExpected, sesActual)
 	}
 
@@ -398,7 +480,7 @@ func TestDiffOnlyEditdistance(t *testing.T) {
 		t.Fatalf("want: \"\", actual: %v", lcs)
 	}
 
-	if !equalsSesElemArray(sesActual, sesExpected) {
+	if !equalsSesElemSlice(sesActual, sesExpected) {
 		t.Fatalf("want: %v, actual: %v", sesExpected, sesActual)
 	}
 }
