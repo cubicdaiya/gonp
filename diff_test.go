@@ -45,6 +45,7 @@ func equalsUniHunks[T Elem](uniHunks1, uniHunks2 []UniHunk[T]) bool {
 func TestDiff(t *testing.T) {
 
 	tests := []struct {
+		name     string
 		a        string
 		b        string
 		ed       int
@@ -53,6 +54,7 @@ func TestDiff(t *testing.T) {
 		uniHunks []UniHunk[rune]
 	}{
 		{
+			name: "string diff1",
 			a:   "abc",
 			b:   "abd",
 			ed:  2,
@@ -75,6 +77,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "string diff2",
 			a:   "abcdef",
 			b:   "dacfea",
 			ed:  6,
@@ -107,6 +110,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "string diff3",
 			a:   "acbdeacbed",
 			b:   "acebdabbabed",
 			ed:  6,
@@ -149,6 +153,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "string diff4",
 			a:   "abcbda",
 			b:   "bdcaba",
 			ed:  4,
@@ -179,6 +184,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "string diff5",
 			a:   "bokko",
 			b:   "bokkko",
 			ed:  1,
@@ -204,6 +210,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "string diff6",
 			a:   "abcaaaaaabd",
 			b:   "abdaaaaaabc",
 			ed:  4,
@@ -247,6 +254,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "empty string diff1",
 			a:        "",
 			b:        "",
 			ed:       0,
@@ -255,6 +263,7 @@ func TestDiff(t *testing.T) {
 			uniHunks: []UniHunk[rune]{},
 		},
 		{
+			name: "empty string diff2",
 			a:   "a",
 			b:   "",
 			ed:  1,
@@ -270,6 +279,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "empty string diff3",
 			a:   "",
 			b:   "b",
 			ed:  1,
@@ -285,6 +295,7 @@ func TestDiff(t *testing.T) {
 			},
 		},
 		{
+			name: "multi byte string diff",
 			a:   "久保竜彦",
 			b:   "久保達彦",
 			ed:  2,
@@ -317,17 +328,17 @@ func TestDiff(t *testing.T) {
 		ses := diff.Ses()
 		uniHunks := diff.UnifiedHunks()
 		if tt.ed != ed {
-			t.Fatalf(":ed: want: %d, got: %d", tt.ed, ed)
+			t.Fatalf(":%s:ed: want: %d, got: %d", tt.name, tt.ed, ed)
 		}
 		if tt.lcs != lcs {
-			t.Fatalf(":lcs: want: %s, got: %s", tt.lcs, lcs)
+			t.Fatalf(":%s:lcs: want: %s, got: %s", tt.name, tt.lcs, lcs)
 		}
 		if !equalsSesElemArray(tt.ses, ses) {
-			t.Fatalf(":ses: want: %v, got: %v", tt.ses, ses)
+			t.Fatalf(":%s:ses: want: %v, got: %v", tt.name, tt.ses, ses)
 		}
 
 		if !equalsUniHunks(tt.uniHunks, uniHunks) {
-			t.Fatalf(":uniHunks: want: %v, got: %v", tt.uniHunks, tt.uniHunks)
+			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, tt.uniHunks)
 		}
 	}
 }
