@@ -11,7 +11,7 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		log.Fatal("./strdiff arg1 arg2")
+		log.Fatal("./strpatch arg1 arg2")
 	}
 	if !utf8.ValidString(os.Args[1]) {
 		log.Fatal("arg1 contains invalid rune")
