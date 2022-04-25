@@ -555,3 +555,14 @@ func BenchmarkStringDiffComposeIfOnlyEd(b *testing.B) {
 		diff.Compose()
 	}
 }
+
+func BenchmarkStringUnifiledHunks(b *testing.B) {
+	s1 := []rune("abc")
+	s2 := []rune("abd")
+	diff := New(s1, s2)
+	diff.Compose()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = diff.UnifiedHunks()
+	}
+}
