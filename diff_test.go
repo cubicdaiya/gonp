@@ -528,3 +528,24 @@ func TestDiffSprintUniHunks(t *testing.T) {
 		t.Fatalf("want: %v, actual: %v", expected, actual)
 	}
 }
+
+func BenchmarkStringDiffCompose(b *testing.B) {
+	s1 := []rune("abc")
+	s2 := []rune("abd")
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		diff := New(s1, s2)
+		diff.Compose()
+	}
+}
+
+func BenchmarkStringDiffComposeIfOnlyEd(b *testing.B) {
+	s1 := []rune("abc")
+	s2 := []rune("abd")
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		diff := New(s1, s2)
+		diff.OnlyEd()
+		diff.Compose()
+	}
+}
