@@ -471,6 +471,8 @@ func TestDiffOnlyEditdistance(t *testing.T) {
 	lcs := string(diff.Lcs())
 	sesActual := diff.Ses()
 	sesExpected := []SesElem[rune]{}
+	uniHunksActual := diff.UnifiedHunks()
+	uniHunksExpected := []UniHunk[rune]{}
 
 	if diff.Editdistance() != 2 {
 		t.Fatalf("want: 2, actual: %v", diff.Editdistance())
@@ -482,6 +484,10 @@ func TestDiffOnlyEditdistance(t *testing.T) {
 
 	if !equalsSesElemSlice(sesActual, sesExpected) {
 		t.Fatalf("want: %v, actual: %v", sesExpected, sesActual)
+	}
+
+	if !equalsUniHunks(uniHunksActual, uniHunksExpected) {
+		t.Fatalf(":uniHunks: want: %v, got: %v", uniHunksExpected, uniHunksActual)
 	}
 }
 
