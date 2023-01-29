@@ -56,7 +56,6 @@ func equalsUniHunks[T Elem](uniHunks1, uniHunks2 []UniHunk[T]) bool {
 }
 
 func TestStringDiff(t *testing.T) {
-
 	tests := []struct {
 		name     string
 		a        string
@@ -79,7 +78,8 @@ func TestStringDiff(t *testing.T) {
 				{e: 'd', t: SesAdd, aIdx: 0, bIdx: 3},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 1, b: 3, c: 1, d: 3,
+				{
+					a: 1, b: 3, c: 1, d: 3,
 					changes: []SesElem[rune]{
 						{e: 'a', t: SesCommon, aIdx: 1, bIdx: 1},
 						{e: 'b', t: SesCommon, aIdx: 2, bIdx: 2},
@@ -107,7 +107,8 @@ func TestStringDiff(t *testing.T) {
 				{e: 'a', t: SesAdd, aIdx: 0, bIdx: 6},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 1, b: 6, c: 1, d: 6,
+				{
+					a: 1, b: 6, c: 1, d: 6,
 					changes: []SesElem[rune]{
 						{e: 'd', t: SesAdd, aIdx: 0, bIdx: 1},
 						{e: 'a', t: SesCommon, aIdx: 1, bIdx: 2},
@@ -145,7 +146,8 @@ func TestStringDiff(t *testing.T) {
 				{e: 'd', t: SesCommon, aIdx: 10, bIdx: 12},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 1, b: 10, c: 1, d: 12,
+				{
+					a: 1, b: 10, c: 1, d: 12,
 					changes: []SesElem[rune]{
 						{e: 'a', t: SesCommon, aIdx: 1, bIdx: 1},
 						{e: 'c', t: SesCommon, aIdx: 2, bIdx: 2},
@@ -182,7 +184,8 @@ func TestStringDiff(t *testing.T) {
 				{e: 'a', t: SesCommon, aIdx: 6, bIdx: 6},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 1, b: 6, c: 1, d: 6,
+				{
+					a: 1, b: 6, c: 1, d: 6,
 					changes: []SesElem[rune]{
 						{e: 'a', t: SesDelete, aIdx: 1, bIdx: 0},
 						{e: 'b', t: SesCommon, aIdx: 2, bIdx: 1},
@@ -211,7 +214,8 @@ func TestStringDiff(t *testing.T) {
 				{e: 'o', t: SesCommon, aIdx: 5, bIdx: 6},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 2, b: 4, c: 2, d: 5,
+				{
+					a: 2, b: 4, c: 2, d: 5,
 					changes: []SesElem[rune]{
 						{e: 'o', t: SesCommon, aIdx: 2, bIdx: 2},
 						{e: 'k', t: SesCommon, aIdx: 3, bIdx: 3},
@@ -244,7 +248,8 @@ func TestStringDiff(t *testing.T) {
 				{e: 'c', t: SesAdd, aIdx: 0, bIdx: 11},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 1, b: 6, c: 1, d: 6,
+				{
+					a: 1, b: 6, c: 1, d: 6,
 					changes: []SesElem[rune]{
 						{e: 'a', t: SesCommon, aIdx: 1, bIdx: 1},
 						{e: 'b', t: SesCommon, aIdx: 2, bIdx: 2},
@@ -255,7 +260,8 @@ func TestStringDiff(t *testing.T) {
 						{e: 'a', t: SesCommon, aIdx: 6, bIdx: 6},
 					},
 				},
-				{a: 8, b: 4, c: 8, d: 4,
+				{
+					a: 8, b: 4, c: 8, d: 4,
 					changes: []SesElem[rune]{
 						{e: 'a', t: SesCommon, aIdx: 8, bIdx: 8},
 						{e: 'a', t: SesCommon, aIdx: 9, bIdx: 9},
@@ -285,9 +291,10 @@ func TestStringDiff(t *testing.T) {
 				{e: 'a', t: SesDelete, aIdx: 1, bIdx: 0},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 1, b: 1, c: 0, d: 0, changes: []SesElem[rune]{
-					{e: 'a', t: SesDelete, aIdx: 1, bIdx: 0},
-				},
+				{
+					a: 1, b: 1, c: 0, d: 0, changes: []SesElem[rune]{
+						{e: 'a', t: SesDelete, aIdx: 1, bIdx: 0},
+					},
 				},
 			},
 		},
@@ -301,9 +308,10 @@ func TestStringDiff(t *testing.T) {
 				{e: 'b', t: SesAdd, aIdx: 0, bIdx: 1},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 0, b: 0, c: 1, d: 1, changes: []SesElem[rune]{
-					{e: 'b', t: SesAdd, aIdx: 0, bIdx: 1},
-				},
+				{
+					a: 0, b: 0, c: 1, d: 1, changes: []SesElem[rune]{
+						{e: 'b', t: SesAdd, aIdx: 0, bIdx: 1},
+					},
 				},
 			},
 		},
@@ -321,13 +329,14 @@ func TestStringDiff(t *testing.T) {
 				{e: '彦', t: SesCommon, aIdx: 4, bIdx: 4},
 			},
 			uniHunks: []UniHunk[rune]{
-				{a: 1, b: 4, c: 1, d: 4, changes: []SesElem[rune]{
-					{e: '久', t: SesCommon, aIdx: 1, bIdx: 1},
-					{e: '保', t: SesCommon, aIdx: 2, bIdx: 2},
-					{e: '竜', t: SesDelete, aIdx: 3, bIdx: 0},
-					{e: '達', t: SesAdd, aIdx: 0, bIdx: 3},
-					{e: '彦', t: SesCommon, aIdx: 4, bIdx: 4},
-				},
+				{
+					a: 1, b: 4, c: 1, d: 4, changes: []SesElem[rune]{
+						{e: '久', t: SesCommon, aIdx: 1, bIdx: 1},
+						{e: '保', t: SesCommon, aIdx: 2, bIdx: 2},
+						{e: '竜', t: SesDelete, aIdx: 3, bIdx: 0},
+						{e: '達', t: SesAdd, aIdx: 0, bIdx: 3},
+						{e: '彦', t: SesCommon, aIdx: 4, bIdx: 4},
+					},
 				},
 			},
 		},
@@ -351,13 +360,12 @@ func TestStringDiff(t *testing.T) {
 		}
 
 		if !equalsUniHunks(tt.uniHunks, uniHunks) {
-			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, tt.uniHunks)
+			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, uniHunks)
 		}
 	}
 }
 
 func TestSliceDiff(t *testing.T) {
-
 	tests := []struct {
 		name     string
 		a        []int
@@ -380,7 +388,8 @@ func TestSliceDiff(t *testing.T) {
 				{e: 3, t: SesCommon, aIdx: 3, bIdx: 3},
 			},
 			uniHunks: []UniHunk[int]{
-				{a: 1, b: 3, c: 1, d: 3,
+				{
+					a: 1, b: 3, c: 1, d: 3,
 					changes: []SesElem[int]{
 						{e: 1, t: SesCommon, aIdx: 1, bIdx: 1},
 						{e: 2, t: SesDelete, aIdx: 2, bIdx: 0},
@@ -422,7 +431,6 @@ func TestSliceDiff(t *testing.T) {
 			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, tt.uniHunks)
 		}
 	}
-
 }
 
 func TestPluralDiff(t *testing.T) {
