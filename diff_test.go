@@ -351,7 +351,7 @@ func TestStringDiff(t *testing.T) {
 		}
 
 		if !equalsUniHunks(tt.uniHunks, uniHunks) {
-			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, tt.uniHunks)
+			t.Fatalf(":%s:uniHunks: want: %v, got: %v", tt.name, tt.uniHunks, uniHunks)
 		}
 	}
 }
